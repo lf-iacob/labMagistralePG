@@ -1,0 +1,65 @@
+Da terminale - Comandi e Outputs
+
+Last login: Mon Oct 20 14:31:44 on ttys000
+lauraiacob@Mac ~ % root
+   ------------------------------------------------------------------
+  | Welcome to ROOT 6.36.02                        https://root.cern |
+  | (c) 1995-2025, The ROOT Team; conception: R. Brun, F. Rademakers |
+  | Built for macosxarm64 on Jul 08 2025, 21:22:35                   |
+  | From tags/6-36-02@6-36-02                                        |
+  | With Apple clang version 17.0.0 (clang-1700.0.13.3)              |
+  | Try '.help'/'.?', '.demo', '.license', '.credits', '.quit'/'.q'  |
+   ------------------------------------------------------------------
+
+root [0] TH1F* h = new TH1F("h", "h", 100, -5,5)
+(TH1F *) 0x134f12e80
+root [1] h->FillRandom("gaus",10000)
+root [2] h->Draw()
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+root [3] TF1* ff = new TF1("ff", "[0]*TF1::Gaus(x,[1],[2])", -10, 10)
+input_line_88:2:94: error: no member named 'Gaus' in 'TF1'
+Double_t TFormula____id10893698315638986744(Double_t const *x,Double_t *p){ return p[0]*TF1::Gaus(x[0],p[1],p[2]) ; }
+                                                                                        ~~~~~^
+input_line_89:2:94: error: no member named 'Gaus' in 'TF1'
+Double_t TFormula____id10893698315638986744(Double_t const *x,Double_t *p){ return p[0]*TF1::Gaus(x[0],p[1],p[2]) ; }
+                                                                                        ~~~~~^
+Error in <prepareMethod>: Can't compile function TFormula____id10893698315638986744 prototype with arguments Double_t const*,Double_t*
+Error in <TFormula::InputFormulaIntoCling>: Error compiling formula expression in Cling
+Error in <TFormula::ProcessFormula>: Formula "[p0]*TF1::Gaus(x,[p1],[p2])" is invalid !
+(TF1 *) 0x135607160
+root [4] TF1* ff=new TF1("ff", "[0]*TMath::Gaus(x,[1],[2])", -10, 10)
+(TF1 *) 0x135608400
+root [5] h->Fit(ff)
+Warning in <Fit>: Abnormal termination of minimization.
+****************************************
+         Invalid FitResult  (status = 2 )
+****************************************
+Minimizer is Minuit2 / Migrad
+Chi2                      =        10000
+NDf                       =           70
+Edm                       =            0
+NCalls                    =           26
+p0                        =            0   +/-   0           
+p1                        =            0   +/-   0           
+p2                        =            0   +/-   0           
+(TFitResultPtr) <nullptr TFitResult>
+root [6] ff->SetParameters(400,0,1)
+root [7] h->Fit("gaus")
+****************************************
+Minimizer is Minuit2 / Migrad
+Chi2                      =      57.7629
+NDf                       =           70
+Edm                       =  1.24167e-06
+NCalls                    =           54
+Constant                  =      397.889   +/-   4.93044     
+Mean                      =    0.0113938   +/-   0.0100493   
+Sigma                     =     0.997452   +/-   0.00730912   	 (limited)
+(TFitResultPtr) <nullptr TFitResult>
+root [8] // or FitPanel
+root [9] // Predef-1D
+root [10] // change intervallo di fit con cursore
+root [11] // vari metodi di minimizzazione - x2 default, c'e' likelihood
+root [12] // posso inizializzare e cambiare i parametri a mano
+root [13] // posso anche sommare le funzioni
+root [14] .q
+lauraiacob@Mac ~ % 
