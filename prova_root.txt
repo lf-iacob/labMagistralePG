@@ -1,4 +1,8 @@
-Da terminale - Comandi e Outputs
+GitHub ufficiale di CMS: https://github.com/cms-sw
+
+ROOT Reference Guide: https://root.cern.ch/root/html534/
+
+---------- Da terminale - Comandi e Outputs ----------
 
 Last login: Mon Oct 20 14:31:44 on ttys000
 lauraiacob@Mac ~ % root
