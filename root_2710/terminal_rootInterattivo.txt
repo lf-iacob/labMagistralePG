@@ -1,0 +1,60 @@
+// --- Comandi usati su ROOT interattivo da terminale ---
+
+
+
+.L es1.cpp
+Example1("Exercies1.txt", "out1.root")
+ProfX->SetLineColor(kRed)
+ProfX->SetMarkerColor(kRed)
+ProfX->Draw("same")
+ProfX->Fit("pol1")
+ProfX->Fit("pol0")
+
+Example1("Exercies2.txt", "out2.root")
+.ls
+ProjX->Draw()
+//perche' ho dato nome che inizia con numero ad una variabile
+TH2F* m=(TH2F*)_file0->Get("2D")
+TF1* myf = new TF1("myf", "[0]*TMath::Gaus(x,[1],[2])+[3]*TMath::Gaus(x,[4],[5])", -20,20)
+h1->Fit("myf")
+myf->SetParameters(1000, 20,1,0,10,5)
+h1->Fit("myf")
+myf->SetParameters(1600,0,1,800,2,5)
+h2->Fit("myf")
+
+
+.L es5.cpp
+ExampleTree("Exercies5.txt", "out5.root")
+.ls
+tree->Draw("A")
+tree->Draw("A:B", "", "colz")
+tree->Draw("A", "B>7", "same")
+.q
+
+
+
+
+.L es5_2.cpp
+ExampleTree("Exercies5.txt", "out5_2.root")
+tree->Print()
+tree->Draw("A")
+tree->Draw("A[0]")
+tree->Draw("A[0]:A[1]","","colz")
+tree->Draw("A:Iteration$","","colz")
+tree->Draw("A:Iteration$")
+tree->Draw("A:Iteration$", "Entry$==1", "1")
+tree->Draw("A:Iteration$*5", "Entry$==1", "1")
+ProfX->SetLineColor(kRed)
+
+
+
+
+
+
+
+
+
+
+
+
+
