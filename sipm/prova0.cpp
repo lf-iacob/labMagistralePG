@@ -7,9 +7,9 @@
 #include <TCanvas.h>
 using namespace std;
 
-void single_event(
-                const char* file_name //file name for the data
-                 ){
+void estrai(
+            const char* file_name //file name for the data
+            ){
   cout<<"-------- SINGLE EVENT ANALYSIS --------"<<endl;
   
   //---- READ ORIGINAL DATA AND SAVE IN TREE
