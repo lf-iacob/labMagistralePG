@@ -3,8 +3,6 @@
 #include <iostream>
 #include <TTree.h>
 #include <TFile.h>
-#include <TH1D.h>
-#include <TCanvas.h>
 using namespace std;
 
 void estrai(
