@@ -1,37 +1,45 @@
+// --- Single event analysis ---
+
 #include <iostream>
 #include <TTree.h>
+#include <TFile.h>
 #include <TH1D.h>
 #include <TCanvas.h>
 using namespace std;
 
-void estrai(const char* file_name){
-  //---- READ DATA AND SAVE IN TREE
-  double y;
-  TTree* V = new TTree("V", "Tensione");
-  V -> ReadFile(file_name,"y/D");
-  V -> SetBranchAddress("y",&y);
-  int tot_ev = V->GetEntries();
+void single_event(
+                const char* file_name //file name for the data
+                 ){
+  cout<<"-------- SINGLE EVENT ANALYSIS --------"<<endl;
+  
+  //---- READ ORIGINAL DATA AND SAVE IN TREE
+      //(units: ADC channels)
+  double v_b; //single value in the tree (with baseline)
+  TTree* ch_b = new TTree("ch_b", "adc_channels_baseline");
+  ch_b -> ReadFile(file_name,"v_b/D");
+  ch_b -> SetBranchAddress("v_b",&v_b);
+  int ntot = ch_b -> GetEntries();
 
-  double parz_ev=0.3*tot_ev;
-  cout<<"Dati iniziali per la baseline: "<<parz_ev<<endl;
-  double ymean=0;
-  for (int i=0; i<parz_ev; i++){
-    V->GetEntry(i);
-    ymean=ymean+y;
+  //---- BASELINE EVALUATION
+  double nparz=0.3*ntot; //post_trigger:50%, data_for_baseline:30% (out of 1024=2^10)
+  cout<<"Data for the baseline evaluation: "<<nparz<<endl;
+  double bline=0;
+  for (int i=0; i<nparz; i++){
+    ch_b->GetEntry(i);
+    bline=bline+v_b;
   }
-  cout<<"Somma: "<<ymean<<endl;
-  ymean=ymean/parz_ev;
-  cout<<"Media: "<<ymean<<endl;
+  bline=bline/nparz;
+  cout<<"Baseline (ADC): "<<bline<<endl;
 
-  // Dati shiftati
-  double ys;
-  TTree* v = new TTree("v", "Tensione shiftata");
-  v->Branch("ys", &ys, "ys/D");
+  //---- SHIFTED DATA
+  double v; //single value in the tree (baseline=0)
+  TTree* ch = new TTree("ch", "adc_channels");
+  ch->Branch("v", &v, "v/D");
 
-  for (int i=0; i<0.4*tot_ev; i++){
-    V->GetEntry(i);
-    ys=y-ymean;
-    v->Fill();
+  for (int i=0; i<nparz; i++){
+    ch_b->GetEntry(i);
+    v=v_b-bline;
+    ch->Fill();
   }
   
 
