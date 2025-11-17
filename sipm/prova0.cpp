@@ -37,7 +37,7 @@ void estrai(
   TTree* ch = new TTree("ch", "adc_channels");
   ch->Branch("v", &v, "v/D");
 
-  for (int i=0; i<nparz; i++){
+  for (int i=0; i<ntot; i++){
     ch_b->GetEntry(i);
     v=v_b-bline;
     ch->Fill();
