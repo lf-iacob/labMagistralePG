@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <TTree.h>
-#include <TFile.h>
+//#include <TFile.h>
 using namespace std;
 
 void estrai(
@@ -11,7 +11,7 @@ void estrai(
   cout<<"-------- SINGLE EVENT ANALYSIS --------"<<endl;
 
   //---- File ROOT
-  TFile *f = new TFile("single_wf.root", "RECREATE");
+  //TFile *f = new TFile("single_wf.root", "RECREATE");
   
   //---- ORIGINAL DATA
       //(units: ADC channels)
