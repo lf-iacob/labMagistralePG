@@ -43,6 +43,7 @@ void wf(
   gr->SetMarkerColor(kViolet);
 
   TCanvas *c = new TCanvas();
+  gPad->SetTicks(1,1);
   c->SetGrid();
   gr->Draw("ALP");
  
