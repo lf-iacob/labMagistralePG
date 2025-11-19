@@ -1,7 +1,7 @@
 // Seconda versione -> uso array
 // --- Esercizio 5 ---
 
-// Criamo tree con i dati
+// Creiamo tree con i dati
 
 void ExampleTree(TString fname, TString outname){
 
