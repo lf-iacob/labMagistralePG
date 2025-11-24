@@ -1,0 +1,51 @@
+lauraiacob@Lauras-MacBook-Air-425 sipm % root wfs.root
+   ------------------------------------------------------------------
+  | Welcome to ROOT 6.36.02                        https://root.cern |
+  | (c) 1995-2025, The ROOT Team; conception: R. Brun, F. Rademakers |
+  | Built for macosxarm64 on Jul 08 2025, 21:22:35                   |
+  | From tags/6-36-02@6-36-02                                        |
+  | With Apple clang version 17.0.0 (clang-1700.0.13.3)              |
+  | Try '.help'/'.?', '.demo', '.license', '.credits', '.quit'/'.q'  |
+   ------------------------------------------------------------------
+
+root [0] 
+Attaching file wfs.root as _file0...
+(TFile *) 0x11c7235d0
+root [1] dd->Draw("C>>h(500,0,600)")
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+root [2] dd->Draw("C>>h(500,-50,600)")
+root [3] dd->Draw("C>>h(1000,-50,600)")
+root [4] TFitEditor::DoFit - using function PrevFitTMP  0x12ece7dc0
+****************************************
+Minimizer is Minuit2 / Migrad
+Chi2                      =      6.30283
+NDf                       =           11
+Edm                       =  7.18898e-06
+NCalls                    =           61
+Constant                  =      13.3615   +/-   2.15188     
+Mean                      =     0.525807   +/-   0.176215    
+Sigma                     =      1.53174   +/-   0.181215     	 (limited)
+TFitEditor::DoFit - using function PrevFitTMP  0x147708880
+****************************************
+Minimizer is Minuit2 / Migrad
+Chi2                      =      13.2698
+NDf                       =           12
+Edm                       =  1.15038e-06
+NCalls                    =           55
+Constant                  =      50.6743   +/-   3.68163     
+Mean                      =      15.8862   +/-   0.0958755   
+Sigma                     =       1.7097   +/-   0.0847465    	 (limited)
+
+root [4] 
+root [4] 
+root [4] 15.9/1.6e7
+(double) 9.9375000e-07
+root [5] 15.9/1.6e7/pow(10,32./20)
+(double) 2.4961871e-08
+root [6] 15.9/1.6e-7
+(double) 99375000.
+root [7] 15.9/1.6e-77/pow(10,32./20)
+(double) 2.4961871e+76
+root [8] 15.9/1.6e-7/pow(10,32./20)
+(double) 2496187.1
+root [9] 
