@@ -49,3 +49,8 @@ root [7] 15.9/1.6e-77/pow(10,32./20)
 root [8] 15.9/1.6e-7/pow(10,32./20)
 (double) 2496187.1
 root [9] 
+
+
+
+
+*Gain pre-amplificatore: 32 dB*
