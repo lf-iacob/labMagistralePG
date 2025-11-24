@@ -1,3 +1,11 @@
+/*
+Visualizzazione dell'istogramma di carica per il run da più eventi.
+Diminuendo l'intensità da 440 a 350, abbiamo potuto vedere chiaramente gli elementi del finger plot.
+L'idea è di scendere ancora un po' di intensità per avere più statistica ad 1pe.
+*/
+
+
+
 Last login: Mon Nov 24 12:32:50 on ttys000
 lauraiacob@Lauras-MacBook-Air-425 ~ % cd fisica_programming/labMagistrale/sipm 
 lauraiacob@Lauras-MacBook-Air-425 sipm % root
