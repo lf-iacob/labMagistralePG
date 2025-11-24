@@ -1,3 +1,17 @@
+/*
+Fit fatto a mano (FitPanel) separatamente su primo e secondo picco (0pe, 1pe).
+Stima rapida del valore del guadagno con delta tra primi due picchi.
+Questo guadagno è il gain del pre-amplificatore (32dB) e SiPM.
+Calcolo fatto sul guadagno del singolo SiPM.
+
+Idea è ora di andare a creare grafico lineare per alimentazione impostata a 
+valore nominale (55.11V, dati appena guardati).
+Poi rifare lo stesso ragionamento cambiando questa di max 1.5V, stando
+attenti a non arrivare al breakdown voltage, che poi non funziona più nulla.
+*/
+
+
+
 lauraiacob@Lauras-MacBook-Air-425 sipm % root wfs.root
    ------------------------------------------------------------------
   | Welcome to ROOT 6.36.02                        https://root.cern |
