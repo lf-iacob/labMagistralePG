@@ -1,4 +1,5 @@
-// --- Multiple event analysis ---
+//LAB: 24/11/2025
+// --- Multiple event analysis (100, 10000) ---
 
 #include <TTree.h>
 #include <TFile.h>
