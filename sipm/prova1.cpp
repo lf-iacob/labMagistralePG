@@ -1,4 +1,4 @@
-// --- Event analysis ---
+// --- Multiple event analysis ---
 
 #include <iostream>
 #include <TTree.h>
@@ -6,15 +6,16 @@
 #include <TH1D.h>
 #include <TCanvas.h>
 using namespace std;
-const int N=100;
+const int N=300; //data for baseline
 
 void estrai(
-           TString file_name //file name for the data
+           TString file_name, //file name for the data
+		   TString output="analysis.root"
            ){
   cout<<"-------- EVENT ANALYSIS --------"<<endl;
 
   //---- File ROOT
-  TFile *f = new TFile("wfs.root", "RECREATE");
+  TFile *f = new TFile(output, "RECREATE");
 
   //---- Read File
   ifstream file;         
@@ -25,8 +26,6 @@ void estrai(
   data->Branch("A", a, "a[1024]/I");
   data->Branch("B", &b, "b/D");
   data->Branch("C", &c, "c/D");
-
-  //da modificare perchè troppi for :)
   
   while(file.good()){
     b=0.;
@@ -43,5 +42,4 @@ void estrai(
   file.close();  
 
   f->Write();
-
 }
