@@ -45,8 +45,9 @@ void wf(
   TCanvas *c = new TCanvas();
   gPad->SetTicks(1,1);
   c->SetGrid();
-  gr->Draw("ALP");
- 
+  gr->Draw("AL");
 
+  f->Write();
+ 
   return;
 }
