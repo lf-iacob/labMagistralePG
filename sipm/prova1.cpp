@@ -7,8 +7,8 @@ using namespace std;
 const int N=300; //data for baseline
 
 void analizza(
-              TString file_name, //file name for the data
-	      TString output="analysis.root" //TFile name as output
+			TString file_name, //file name for the data
+			TString output="analysis.root" //TFile name as output
              ){
 
   //---- File ROOT
