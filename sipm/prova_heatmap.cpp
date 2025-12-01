@@ -56,7 +56,7 @@ void analizza(TString file_name, TString output="analysis.root") {
     }
 
     // ---- Disegno
-    gStyle->SetPalette(kViridis);
+    gStyle->SetPalette(kSolar);
     TCanvas *chp = new TCanvas("chp","Heatmap");
     h2->Draw("COLZ");
 
