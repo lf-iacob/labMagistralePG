@@ -64,7 +64,7 @@ void analizza(TString file_name1, TString file_name2, TString file_name3, TStrin
     int xBins = ARRAY_SIZE;    // numero di campioni
     double xmin = 0;
     double xmax = ARRAY_SIZE;
-    int yBins = 300;         
+    int yBins = 500;         
     double ymin = 0;        
     double ymax = 2400;  
 
