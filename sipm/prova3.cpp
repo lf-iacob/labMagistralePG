@@ -152,6 +152,7 @@ void analizza(
   gr->SetMarkerColor(kBlue);
 
   TCanvas *cgain = new TCanvas();
+  gStyle->SetOptFit(1111);
   gPad->SetTicks(1,1);
   cgain->SetGrid();
   gr->Draw("AP");
@@ -173,6 +174,11 @@ void analizza(
   cout << "Coefficiente angolare (Gain) = " << B << " +- " << eB << endl;
   cout << "Intercetta = " << A << " +- " << eA<< endl;
 
+
+  //---- Saving in TFile
+  f->cd();
+  cgain->Write();
+  
   f->Write();
   f->Close();
 
