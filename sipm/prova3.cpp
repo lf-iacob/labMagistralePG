@@ -9,7 +9,7 @@ using namespace std;
 const int N=100; //data for baseline
 
 void analizza(
-              TString file_name1, TString file_name2, TString file_name3, TString file_name4,  //file name for the data
+              TString file_name1, TString file_name2, TString file_name3, TString file_name4, TString file_name5,
               TString output="analysis.root" //TFile name as output
              ){
   cout<<endl<<"---- MULTIPLE EVENT ANALYSIS ----"<<endl<<endl;
@@ -82,6 +82,20 @@ void analizza(
   }
   file.close();
 
+
+  file.open(file_name5);
+  while(file.good()){
+    b=0.;
+    c=0.;
+    for(int i=0;i<1024;i++){
+      file>>a[i];
+      if(i<N) b+=double(a[i])/N;
+      else if(i>=450 && i<=550) c+=(b-a[i])*2000./4096*4/50;
+    }
+    dd->Fill();
+  }
+  file.close();
+
   int n = dd->GetEntries(); //#events collected
 
   //---- Charge THistogram
@@ -92,7 +106,7 @@ void analizza(
   }
 
   //---- Gaussian Fit
-  double m[6], em[6];
+  double m[7], em[7];
   TF1 *g = new TF1("g", "gaus");
   hc->Fit(g, "N", "", -3.8, 6); //0pe
   m[0] = g->GetParameter(1);
@@ -112,35 +126,52 @@ void analizza(
   hc->Fit(g, "N", "", 75, 83);  //5pe
   m[5] = g->GetParameter(1);
   em[5]=g->GetParError(2);
-
-  /*//---- Gain
-  double gain=(m1-m0)/1.6e-7/pow(10., 32./20.); //pre-amp:32dB
-  cout<<"Gain: "<<gain<<endl<<endl;*/
+  hc->Fit(g, "N", "", 90, 98);  //6pe
+  m[6] = g->GetParameter(1);
+  em[6]=g->GetParError(2);
   
-  double pe[6], epe[6];
+  double pe[7], epe[7];
   cout<<endl<<"-- Charge estimation [pC] --"<<endl;
-  for(int i=0; i<6; i++){
+  for(int i=0; i<7; i++){
     pe[i]=i;
     epe[i]=0;
-    cout<<i<<"pe: "<<m[i]<<"+-"<<em[i]<<endl;
+    cout<<i<<"pe: "<<m[i]/1.6e-7/pow(10, 32./20.)<<"+-"<<em[i]<<endl;
   }
 
   TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
   gr->SetTitle("Gain plot;pe;gain");
-  gr->SetLineColor(kViolet+1);
+  gr->SetLineColor(kBlue+1);
   gr->SetLineWidth(3);
   gr->SetMarkerStyle(8);
   gr->SetMarkerSize(0.1);
-  gr->SetMarkerColor(kViolet);
+  gr->SetMarkerColor(kBlue);
 
   TCanvas *cgain = new TCanvas();
   gPad->SetTicks(1,1);
   cgain->SetGrid();
   gr->Draw("AP");
 
+  TF1 *l = new TF1("l", "[0] + [1]*x", -0.5, 6.5);
+  l->SetLineColor(kRed);
+  l->SetLineWidth(2);
+  gr->Fit(l, "R");
+
+
+  double A = l->GetParameter(0);
+  double eA = l->GetParError(0);
+  double B = l->GetParameter(1);
+  double eB = l->GetParError(1);
+  gr->Draw("AP");
+  l->Draw("same");
+
+  cout << endl << "---- Fit lineare ----" << endl;
+  cout << "Coefficiente angolare (gain) = " << B << " +- " << eB << endl;
+  cout << "Intercetta = " << A << " +- " << eA<< endl;
+
   f->Write();
   f->Close();
 
 }
+
 
 
