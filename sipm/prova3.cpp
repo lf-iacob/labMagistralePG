@@ -29,6 +29,7 @@ void analizza(
   dd->Branch("B", &b, "b/D");
   dd->Branch("C", &c, "c/D");
 
+  
   //---- TTree->Fill()
   while(file.good()){
     b=0.;
@@ -98,6 +99,9 @@ void analizza(
 
   int n = dd->GetEntries(); //#events collected
 
+
+
+  
   //---- Charge THistogram
   TH1F *hc = new TH1F("hc", "Charge Histogram;Charge (pC);Counts",500,-50,300);
   for(int i=0; i<n; i++) {
@@ -128,18 +132,19 @@ void analizza(
   em[5]=g->GetParError(2);
   hc->Fit(g, "N", "", 90, 98);  //6pe
   m[6] = g->GetParameter(1);
-  em[6]=g->GetParError(2);
-  
+  em[6]=g->GetParError(2);  
   double pe[7], epe[7];
   cout<<endl<<"-- Charge estimation [pC] --"<<endl;
   for(int i=0; i<7; i++){
     pe[i]=i;
-    epe[i]=0;
-    cout<<i<<"pe: "<<m[i]/1.6e-7/pow(10, 32./20.)<<"+-"<<em[i]<<endl;
+    epe[i]=0;  //boh, errore nullo(?)
+    m[i]=m[i]/1.6e-7/pow(10, 32./20.);
+    cout<<i<<"pe: "<<m[i]<<"+-"<<em[i]<<endl;
   }
 
+  //---- Plot (linear)
   TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
-  gr->SetTitle("Gain plot;pe;gain");
+  gr->SetTitle("Gain plot;pe;Gain");
   gr->SetLineColor(kBlue+1);
   gr->SetLineWidth(3);
   gr->SetMarkerStyle(8);
@@ -151,11 +156,11 @@ void analizza(
   cgain->SetGrid();
   gr->Draw("AP");
 
-  TF1 *l = new TF1("l", "[0] + [1]*x", -0.5, 6.5);
+  //---- Fit plot (linear)
+  TF1 *l = new TF1("l", "[0]+[1]*x", -0.5, 6.5);
   l->SetLineColor(kRed);
   l->SetLineWidth(2);
   gr->Fit(l, "R");
-
 
   double A = l->GetParameter(0);
   double eA = l->GetParError(0);
@@ -165,13 +170,12 @@ void analizza(
   l->Draw("same");
 
   cout << endl << "---- Fit lineare ----" << endl;
-  cout << "Coefficiente angolare (gain) = " << B << " +- " << eB << endl;
+  cout << "Coefficiente angolare (Gain) = " << B << " +- " << eB << endl;
   cout << "Intercetta = " << A << " +- " << eA<< endl;
 
   f->Write();
   f->Close();
 
 }
-
 
 
