@@ -1,0 +1,11 @@
+// Chain dei TTree
+
+
+TChain* ch=new TChain("dd","dd")
+ch->AddFile("fit_10000_280.root")
+ch->GetEntries()
+ch->AddFile("fit_10000_320.root")
+ch->GetEntries()
+ch->Draw("c")
+ch->AddFile("fit_10000_350.root")
+ch->Draw("c")
