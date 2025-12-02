@@ -139,6 +139,7 @@ void analizza(
     pe[i]=i;
     epe[i]=0;  //boh, errore nullo(?)
     m[i]=m[i]/1.6e-7/pow(10, 32./20.);
+    em[i]=em[i]/1.6e-7/pow(10, 32./20.);
     cout<<i<<"pe: "<<m[i]<<"+-"<<em[i]<<endl;
   }
 
