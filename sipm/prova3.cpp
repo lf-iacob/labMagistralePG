@@ -114,25 +114,25 @@ void analizza(
   TF1 *g = new TF1("g", "gaus");
   hc->Fit(g, "N", "", -3.8, 6); //0pe
   m[0] = g->GetParameter(1);
-  em[0] = g->GetParError(2);
+  em[0] = g->GetParError(1);
   hc->Fit(g, "N", "", 9.5, 20); //1pe
   m[1] = g->GetParameter(1);
-  em[1] = g->GetParError(2);
+  em[1] = g->GetParError(1);
   hc->Fit(g, "N", "", 26, 36);  //2pe
   m[2] = g->GetParameter(1);
-  em[2]= g->GetParError(2);
+  em[2]= g->GetParError(1);
   hc->Fit(g, "N", "", 43, 52);  //3pe
   m[3] = g->GetParameter(1);
-  em[3] = g->GetParError(2);
+  em[3] = g->GetParError(1);
   hc->Fit(g, "N", "", 60, 66);  //4pe
   m[4] = g->GetParameter(1);
-  em[4] = g->GetParError(2);
+  em[4] = g->GetParError(1);
   hc->Fit(g, "N", "", 75, 83);  //5pe
   m[5] = g->GetParameter(1);
-  em[5]=g->GetParError(2);
+  em[5]=g->GetParError(1);
   hc->Fit(g, "N", "", 90, 98);  //6pe
   m[6] = g->GetParameter(1);
-  em[6]=g->GetParError(2);  
+  em[6]=g->GetParError(1);  
   double pe[7], epe[7];
   cout<<endl<<"-- Charge estimation [pC] --"<<endl;
   for(int i=0; i<7; i++){
