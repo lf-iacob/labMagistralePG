@@ -113,25 +113,25 @@ void analizza(
   TF1 *g = new TF1("g", "gaus");
   hg->Fit(g, "N", "", -500000, 500000); //0pe
   m[0] = g->GetParameter(1);
-  em[0] = g->GetParError(2);
+  em[0] = g->GetParError(1);
   hg->Fit(g, "N", "", 2000000, 3000000); //1pe
   m[1] = g->GetParameter(1);
-  em[1] = g->GetParError(2);
+  em[1] = g->GetParError(1);
   hg->Fit(g, "N", "", 4500000, 5300000);  //2pe
   m[2] = g->GetParameter(1);
-  em[2]= g->GetParError(2);
+  em[2]= g->GetParError(1);
   hg->Fit(g, "N", "", 7000000, 7700000);  //3pe
   m[3] = g->GetParameter(1);
-  em[3] = g->GetParError(2);
+  em[3] = g->GetParError(1);
   hg->Fit(g, "N", "", 9400000, 10200000);  //4pe
   m[4] = g->GetParameter(1);
-  em[4] = g->GetParError(2);
+  em[4] = g->GetParError(1);
   hg->Fit(g, "N", "", 11800000, 12700000);  //5pe
   m[5] = g->GetParameter(1);
-  em[5]=g->GetParError(2);
+  em[5]=g->GetParError(1);
   hg->Fit(g, "N", "", 14200000, 15000000);  //6pe
   m[6] = g->GetParameter(1);
-  em[6]=g->GetParError(2);  
+  em[6]=g->GetParError(1);  
   double pe[7], epe[7];
   cout<<endl<<"-- Gain estimation --"<<endl;
   for(int i=0; i<7; i++){
