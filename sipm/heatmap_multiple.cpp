@@ -54,9 +54,11 @@ void analizza(TString file_name1, TString file_name2, TString file_name3, TStrin
 
     gStyle->SetPalette(kViridis);
     TCanvas *chp = new TCanvas("chp","Heatmap");
+    chp->cd();
     chp->SetLogz();
     h2->Draw("COLZ");
-
+    chp->Write();
+ 
     f->Write();
 
 }
