@@ -72,7 +72,7 @@ void analizza(
     gfit[j] = new TF1("gfit", "gaus", -20, 140); //hard-coded
     hcf->Fit(gfit[j], "QS", " ", range_i[j], range_f[j]); //j_pe
     m[j] = gfit[j]->GetParameter(1)/1.6e-7/pow(10, 32./20.); //gain
-    em[j] = gfit[j]->GetParError(2)/1.6e-7/pow(10, 32./20.); //error gain
+    em[j] = gfit[j]->GetParError(1)/1.6e-7/pow(10, 32./20.); //error gain
     chirGauss[j]=gfit[j]->GetChisquare()/gfit[j]->GetNDF();
     pv[j]=TMath::Prob(gfit[j]->GetChisquare(),gfit[j]->GetNDF());
     cout<<j<<"pe: "<<m[j]<<"+-"<<em[j]<<",   chi2ridotto: "<<chirGauss[j]<<" -> p_value: "<<pv[j]<<" -- range=["<<range_i[j]<<";"<<range_f[j]<<"] --"<<endl;
