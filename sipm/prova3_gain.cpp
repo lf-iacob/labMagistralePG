@@ -143,7 +143,7 @@ void analizza(
   }
 
   //---- Plot (linear)
-  TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
+  TGraphErrors *gr = new TGraphErrors(7, pe, m, epe, em);
   gr->SetTitle("Gain plot;pe;Gain");
   gr->SetLineColor(kBlue+1);
   gr->SetLineWidth(3);
