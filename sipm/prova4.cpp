@@ -57,11 +57,11 @@ void analizza(
   gPad->SetTicks(1,1);
   hcf->Draw();
   hcf->SetLineColor(kBlack);
-  hcf->SetLineWidth(2);
+  hcf->SetLineWidth(3);
   
   //---- Gaussian Fit
-  cout<<"-- Charge estimation (pC) --"<<endl;
-  double m[7], em[7], chirGauss[7], pv[7];
+  cout<<"--- Gaussian fit ---"<<endl;
+  double ch[7], ech[7], m[7], em[7], chirGauss[7], pv[7];
   double pe[7]={0,1,2,3,4,5,6}, epe[7]={0,0,0,0,0,0,0}; //TGraph vuole i double :/
   
   double range_i[7] = {-3.4, 12, 28, 44, 59, 75, 90};
@@ -71,15 +71,17 @@ void analizza(
   for(int j=0; j<7; j++){
     gfit[j] = new TF1("gfit", "gaus", -20, 140); //hard-coded
     hcf->Fit(gfit[j], "QS", " ", range_i[j], range_f[j]); //j_pe
-    m[j] = gfit[j]->GetParameter(1)/1.6e-7/pow(10, 32./20.); //gain
-    em[j] = gfit[j]->GetParError(1)/1.6e-7/pow(10, 32./20.); //error gain
-    chirGauss[j]=gfit[j]->GetChisquare()/gfit[j]->GetNDF();
-    pv[j]=TMath::Prob(gfit[j]->GetChisquare(),gfit[j]->GetNDF());
-    cout<<j<<"pe: "<<m[j]<<"+-"<<em[j]<<",   chi2ridotto: "<<chirGauss[j]<<" -> p_value: "<<pv[j]<<" -- range=["<<range_i[j]<<";"<<range_f[j]<<"] --"<<endl;
+    ch[j] = gfit[j]->GetParameter(1);
+    ech[j] = gfit[j]->GetParError(1);
+    m[j] = ch[j]/1.6e-7/pow(10, 32./20.); //gain
+    em[j] = ech[j]/1.6e-7/pow(10, 32./20.); //error gain
+    chirGauss[j] = gfit[j]->GetChisquare()/gfit[j]->GetNDF();
+    pv[j] = TMath::Prob(gfit[j]->GetChisquare(),gfit[j]->GetNDF());
+    cout<<j<<"pe => Charge (pC): "<<ch[j]<<"+-"<<ech[j]<<", Gain: "<<m[j]<<"+-"<<em[j]<<", X2r: "<<chirGauss[j]<<" -> p_value: "<<pv[j]<<" -- ["<<range_i[j]<<";"<<range_f[j]<<"] --"<<endl;
     //drawings
-    gfit[j]->SetLineColor(kPink + j);
-    gfit[j]->SetLineWidth(2);
-    gfit[j]->SetNpx(700); //numero di punti in cui sono valutate le gaussiane
+    gfit[j]->SetLineColor(kTeal + j);
+    gfit[j]->SetLineWidth(3);
+    gfit[j]->SetNpx(750); //numero di punti in cui sono valutate le gaussiane
     gfit[j]->Draw("same");
     hc_fit->Update();
   }
@@ -87,10 +89,9 @@ void analizza(
   cout<<endl;
   
   //---- Plot (linear)
+  cout<<"--- Linear fit ---"<< endl;
   TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
   gr->SetTitle("Gain plot;pe;Gain");
-  gr->SetLineColor(kBlue+1);
-  gr->SetLineWidth(3);
   gr->SetMarkerStyle(8);
   gr->SetMarkerSize(0.1);
   gr->SetMarkerColor(kBlue);
@@ -106,7 +107,6 @@ void analizza(
   l->SetLineColor(kRed);
   l->SetLineWidth(2);
   gr->Fit(l, "R");
-  cgain->Write();
 
   double A = l->GetParameter(0);
   double eA = l->GetParError(0);
@@ -115,12 +115,15 @@ void analizza(
   gr->Draw("AP");
   l->Draw("same");
 
-  cout<<endl<<"---- Fit lineare ----"<< endl;
-  cout<<"Coefficiente angolare (Gain) = "<<B<<"+-"<<eB<<endl;
-  cout<<"Intercetta = "<<A<<"+-"<<eA<<endl<<endl;
+  cout<<endl<<"Coefficiente angolare (Gain) = "<<B<<" +- "<<eB<<endl;
+  cout<<"Intercetta = "<<A<<" +- "<<eA<<endl<<endl;
 
+  cgain->Write();
+  
   //---- Saving in TFile
   f->Write();
   //f->Close();
 
 }
+
+
