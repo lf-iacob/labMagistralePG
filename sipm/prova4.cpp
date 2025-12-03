@@ -90,7 +90,7 @@ void analizza(
   
   //---- Plot (linear)
   cout<<"--- Linear fit ---"<< endl;
-  TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
+  TGraphErrors *gr = new TGraphErrors(7, pe, m, epe, em);
   gr->SetTitle("Gain plot;pe;Gain");
   gr->SetMarkerStyle(8);
   gr->SetMarkerSize(0.1);
