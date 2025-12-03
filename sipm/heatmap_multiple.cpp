@@ -6,7 +6,6 @@
 #include <TStyle.h>
 const int ARRAY_SIZE = 1024;  
 const int N = 100;
-const int NUM_WFS = 10000;
 
 void analizza(TString file_name1, TString file_name2, TString file_name3, TString file_name4, TString file_name5,
 	      TString output="analysis.root") {
@@ -24,51 +23,26 @@ void analizza(TString file_name1, TString file_name2, TString file_name3, TStrin
 
     // ---- Lettura file
     ifstream file;
-    file.open(file_name1);
-    while(file.good()){
-      for(int i=0;i<1024;i++) file>>a[i];
-      dd->Fill();
+    TString files[5] = {file_name1, file_name2, file_name3, file_name4, file_name5};
+    for(int k=0; k<5; k++){
+      file.open(files[k]);
+      while(file.good()){
+	for(int i=0;i<1024;i++) file>>a[i];
+	dd->Fill();
+      }
+      file.close();
     }
-    file.close();
-
-    file.open(file_name2);
-    while(file.good()){
-      for(int i=0;i<1024;i++) file>>a[i];
-      dd->Fill();
-    }
-    file.close();
-
-    file.open(file_name3);
-    while(file.good()){
-      for(int i=0;i<1024;i++) file>>a[i];
-      dd->Fill();
-    }
-    file.close();
-
-    file.open(file_name4);
-    while(file.good()){
-      for(int i=0;i<1024;i++) file>>a[i];
-      dd->Fill();
-    }
-    file.close();
-
-    file.open(file_name5);
-    while(file.good()){
-      for(int i=0;i<1024;i++) file>>a[i];
-      dd->Fill();
-    }
-    file.close();
 
     // ---- Heatmap
     int nEvents = dd->GetEntries();
     int xBins = ARRAY_SIZE;    // numero di campioni
     double xmin = 0;
     double xmax = ARRAY_SIZE;
-    int yBins = 500;         
+    int yBins = 1500;         
     double ymin = 0;        
     double ymax = 2400;  
 
-    TH2D* h2 = new TH2D("h2", "Heatmap;Time (ticks);Amplitude [ADC];Counts", 
+    TH2D* h2 = new TH2D("h2", "Heatmap;Time (ticks);Amplitude (ADC);Counts", 
 			xBins, xmin, xmax, yBins, ymin, ymax);
 
     for(int i=0; i<nEvents; i++){
@@ -78,7 +52,7 @@ void analizza(TString file_name1, TString file_name2, TString file_name3, TStrin
       }
     }
 
-    gStyle->SetPalette(kSolar);
+    gStyle->SetPalette(kViridis);
     TCanvas *chp = new TCanvas("chp","Heatmap");
     chp->SetLogz();
     h2->Draw("COLZ");
