@@ -92,7 +92,7 @@ void analizza(
   
 
   //---- Plot (linear)
-  cout<<"--- Linear fit ---"<< endl;
+  cout<<"--- Linear fit ---"<<endl;
   TGraphErrors *gr = new TGraphErrors(7, pe, m, epe, em);
   gr->SetTitle(";pe;Gain");
   gr->SetMarkerStyle(8);
@@ -108,21 +108,21 @@ void analizza(
   gPad->SetBottomMargin(0.08);
   gPad->SetTopMargin(0.06);
   gPad->SetTicks(1,1);
-  cgain->SetGrid();
+  gPad->SetGrid(1,1);
   gr->Draw("AP");
 
   //---- Fit plot (linear)
   TF1 *l = new TF1("l", "[0]+[1]*x", -0.5, 6.5);
   l->SetLineColor(kPink-1);
   l->SetLineWidth(2);
-  gr->Fit(l,"R");
-
-  double A = l->GetParameter(0);
-  double eA = l->GetParError(0);
-  double B = l->GetParameter(1);
-  double eB = l->GetParError(1);
-  cout<<endl<<"Coefficiente angolare (Gain) = "<<B<<" +- "<<eB<<endl;
-  cout<<"Intercetta = "<<A<<" +- "<<eA<<endl<<endl;
+  TFitResultPtr r = gr->Fit(l, "RS"); // Return fit result (important)
+  double A = r->Parameter(0);
+  double B = r->Parameter(1);
+  double eA = r->ParError(0);
+  double eB = r->ParError(1);
+  cout<<endl<<"Coefficiente angolare (Gain) = "<<B<<"+-"<<eB<<endl;
+  cout<<"Intercetta = "<<A<<"+-"<<eA<<endl<<endl;
+  double covAB = r->CovMatrix(0, 1);
 
   double res[7], eres[7];
   for(int i=0; i<7; i++){
@@ -141,12 +141,49 @@ void analizza(
   gPad->SetTopMargin(0.08);
   gPad->SetBottomMargin(0.28);
   gPad->SetTicks(1,1);
-  cgain->SetGrid();
   gres->Draw("AP");
+
+
+  // residual fit: region
+  const int NB = 700;
+  double xb[NB], yb[NB], eyb[NB];
+
+  for(int i=0; i<NB; i++){
+    xb[i] = 6.5 * i / (NB-1);
+    yb[i] = 0;
+    double sigma = sqrt(eA*eA + xb[i]*xb[i]*eB*eB + 2*xb[i]*covAB);
+    eyb[i] = sigma;
+  }
+
+  TGraphErrors *band = new TGraphErrors(NB, xb, yb, 0, eyb);
+  band->SetFillColorAlpha(kPink-1, 0.35);
+  band->SetLineColor(kPink-3);
+  band->SetFillStyle(1001);
+
+  cgain->cd(2);
+  gPad->SetPad(0,0,1,0.32);
+  gPad->SetTopMargin(0.08);
+  gPad->SetBottomMargin(0.28);
+  gPad->SetTicks(1,1);
+  gPad->SetGrid(1,1);
+
+  double minY = 1e9;
+  double maxY = -1e9;
+  for(int i=0; i<7; i++){
+    double rmin = res[i] - eres[i];
+    double rmax = res[i] + eres[i];
+    if(rmin < minY) minY = rmin;
+    if(rmax > maxY) maxY = rmax;
+  }
+  double margin = 0.1*(maxY - minY);
+  band->GetYaxis()->SetRangeUser(minY - margin, maxY + margin);
+
+  band->Draw("3");
+  gres->Draw("P SAME");
 
   TLine *zero = new TLine(0,0,6.5,0);
   zero->SetLineColor(kPink-1);
-  zero->SetLineWidth(2);
+  zero->SetLineWidth(1);
   zero->Draw("same");
 
   cgain->Write();
@@ -156,4 +193,6 @@ void analizza(
   //f->Close();
 
 }
+
+
 
