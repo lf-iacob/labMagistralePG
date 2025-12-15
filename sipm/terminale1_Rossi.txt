@@ -1,0 +1,10 @@
+// Mettere in evidenza il picco a -1pe
+
+dd->Scan("C","C<0")
+dd->Draw("A:Iteration$","Entry$==28","l")
+TFile *_file0 = TFile::Open("analysis1.root")
+dd->Draw("A:Iteration$","Entry$==28","l")
+dd->Show(28)
+dd->Draw("B-A:Iteration$","Entry$==28","l")
+dd->Draw("B>>h(100,2150,2250)","","")
+dd->Draw("C:B>>jj(100,2150,2250,1000,-50,1000)","","colz")
