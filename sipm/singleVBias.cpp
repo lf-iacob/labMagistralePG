@@ -10,15 +10,18 @@ const int N=100; //data for baseline
 
 void analizza(
               double VBias,
-	      TString file_name1, TString file_name2, TString file_name3
+	      TString file_name1, TString file_name2, TString file_name3,
+	      TString output="output.root"
              ){
-  cout<<endl<<"------> ANALYSIS VBias = "<<VBias<<endl<<endl;
+  cout<<endl<<"------> ANALYSIS VBias (V) = "<<VBias<<endl<<endl;
     
   //---- File ROOT
-  TString name;
-  name.Form("%.2f", VBias);
-  name.ReplaceAll(".", "_");
-  TString output = "VBias" + name + ".root";
+  if(output=="output.root"){
+    TString name;
+    name.Form("%.2f", VBias);
+    name.ReplaceAll(".", "_");
+    output = "VBias" + name + ".root";
+  }
   TFile *f = new TFile(output, "RECREATE");
 
   //---- Create TTree
@@ -75,14 +78,14 @@ void analizza(
     range_f = { 3.4, 18, 34, 49, 66, 81, 96};
 
   if(VBias==54.51){ //Da aggiustare per fit migliori
-    hfit_i= -5; hfit_f = 110;
+    hfit_i= -20; hfit_f = 110;
     range_i = {-3,  8, 23.5, 34, 48, 60, 74};
     range_f = { 3, 17, 28  , 40, 54, 67, 80};
   }
-  else { //VBias = 56.31 //DA AGGIUSTARE
-    hfit_i= -20; hfit_f = 140;
-    range_i = {-3.4, 12, 28, 44, 59, 75, 90};
-    range_f = { 3.4, 18, 34, 49, 66, 81, 96};
+  else if(VBias==56.31) { //DA AGGIUSTARE
+    hfit_i= -20; hfit_f = 200;
+    range_i = {-5, 18, 39, 65, 86, 108, 150};
+    range_f = { 4, 25, 48, 70, 94, 114, 160};
   }
   
   TF1 *gfit[7];
