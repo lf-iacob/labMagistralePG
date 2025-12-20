@@ -70,7 +70,7 @@ void analizza(
   
   //---- Gaussian Fit
   cout<<"--- Gaussian fit ---"<<endl;
-  double ch[7], ech[7], m[7], em[7], chirGauss[7], pv[7];
+  double ch[7], s[2], ech[7], m[7], em[7], chirGauss[7], pv[7];
   double pe[7]={0,1,2,3,4,5,6}, epe[7]={0,0,0,0,0,0,0};
 
   double hfit_i=-20, hfit_f=140; //HARD_CODED
@@ -93,6 +93,7 @@ void analizza(
     gfit[j] = new TF1("gfit", "gaus", hfit_i, hfit_f); //hard-coded
     hcf->Fit(gfit[j], "QS", " ", range_i[j], range_f[j]); //j_pe
     ch[j] = gfit[j]->GetParameter(1);
+    if(j==0 || j==1) s[j] = gfit[j]->GetParameter(2);
     ech[j] = gfit[j]->GetParError(1);
     m[j] = ch[j]/1.6e-7/pow(10, 32./20.); //gain
     em[j] = ech[j]/1.6e-7/pow(10, 32./20.); //error gain
@@ -108,8 +109,12 @@ void analizza(
   }
   hc_fit->Write();
   cout<<endl;
-  
 
+  //---- SNR, SSPE
+  double snr = (ch[1]-ch[0])/s[0];
+  double sspe = (ch[1]-ch[0])/ sqrt(s[0]*s[0]+s[1]*s[1]);
+  cout<<"SNR: "<<snr<<"; SSPE: "<<sspe<<endl<<endl;
+  
   //---- Plot (linear)
   cout<<"--- Linear fit ---"<<endl;
   TGraphErrors *gr = new TGraphErrors(7, pe, m, epe, em);
