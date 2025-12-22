@@ -1,0 +1,6 @@
+root analysis.root
+TFile *_file0 = TFile::Open("analysis.root")
+hc->Draw()
+TFile *_file1 = TFile::Open("dati_55_81_180.root")
+hc->SetLineColor(kRed)
+hc->Draw("same")
