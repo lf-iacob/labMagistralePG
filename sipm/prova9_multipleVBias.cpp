@@ -290,7 +290,7 @@ void totale(
   double covCD = rg->CovMatrix(0,1);
   
   TGraph *g_fitg = new TGraph(4, vbias, gain1pe);
-  fitg->SetLineColor(kPink);
+  fitg->SetLineColor(kPink-8);
   fitg->SetLineWidth(2);
   fitg->Draw("SAME");
   
@@ -303,7 +303,7 @@ void totale(
   TGraphErrors *gres = new TGraphErrors(4, vbias, res, 0, eres);
   gres->SetMarkerStyle(8);
   gres->SetMarkerSize(0.5);
-  gres->SetMarkerColor(kAzure-3);
+  gres->SetMarkerColor(kBlack);
   gres->SetTitle(";VBias;Residuals");
   
   pad2->cd();
@@ -323,8 +323,8 @@ void totale(
   }
 
   TGraphErrors *band = new TGraphErrors(NB, xb, yb, 0, eyb);
-  band->SetFillColorAlpha(kPink-1, 0.35);
-  band->SetLineColor(kPink-3);
+  band->SetFillColorAlpha(kPink+4, 0.35);
+  band->SetLineColor(kPink-9);
   band->SetFillStyle(1001);
 
   double minY = 1e9;
@@ -342,7 +342,7 @@ void totale(
   gres->Draw("P SAME");
 
   TLine *zero = new TLine(54.4,0,56.4,0);
-  zero->SetLineColor(kPink-1);
+  zero->SetLineColor(kPink-8);
   zero->SetLineWidth(1);
   zero->Draw("SAME");
 
