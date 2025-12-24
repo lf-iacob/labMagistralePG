@@ -6,7 +6,7 @@ const int N=100; //data for baseline
 
 void albero(TString filename, TString output="output.root"){
 
-  cout<<endl<<"------> Analysis single file: "<<filename<<endl<<endl;
+  cout<<endl<<"------> TTree single file: "<<filename<<endl<<endl;
 
   //---- TFile as output
   if (output == "output.root"){
