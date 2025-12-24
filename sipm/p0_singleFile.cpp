@@ -27,7 +27,7 @@ void albero(TString filename, TString output="output.root"){
 
   //---- TTree->Fill()
   ifstream file;
-  file.open(Form("dati/%s", filename.Data()));
+  file.open(filename);
   while(file.good()){
     b=0.; c=0.;
     for(int i=0;i<1024;i++){
