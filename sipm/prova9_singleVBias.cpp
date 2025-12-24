@@ -34,8 +34,8 @@ void analizza(
 
   //---- TTree->Fill()
   ifstream file;
-  TString files[5] = {file_name1, file_name2, file_name3};
-  for(int k=0; k<5; k++){
+  TString files[3] = {file_name1, file_name2, file_name3};
+  for(int k=0; k<3; k++){
     file.open(files[k]);
     while(file.good()){
       b=0.; c=0.;
@@ -70,26 +70,31 @@ void analizza(
   
   //---- Gaussian Fit
   cout<<"--- Gaussian fit ---"<<endl;
-  double ch[7], s[2], ech[7], m[7], em[7], chirGauss[7], pv[7];
-  double pe[7]={0,1,2,3,4,5,6}, epe[7]={0,0,0,0,0,0,0};
+  double ch[6], s[2], ech[6], m[6], em[6], chirGauss[6], pv[6];
+  double pe[6]={0,1,2,3,4,5}, epe[6]={0,0,0,0,0,0};
 
   double hfit_i=-20, hfit_f=140; //HARD_CODED
-  vector<double> range_i = {-3.4, 12, 28, 44, 59, 75, 90}, //VBias==55.11
-    range_f = { 3.4, 18, 34, 49, 66, 81, 96};
+  vector<double> range_i = {-3.4, 12, 28, 44, 59, 75}, //VBias==55.11
+    range_f = { 3.4, 18, 34, 49, 66, 81};
 
   if(VBias==54.51){ //Da aggiustare per fit migliori
     hfit_i= -20; hfit_f = 110;
-    range_i = {-3,  8, 23.5, 34, 48, 60, 74};
-    range_f = { 3, 17, 28  , 40, 54, 67, 80};
+    range_i = {-3,  8, 23.5, 34, 48, 61};
+    range_f = { 3, 17, 28  , 40, 54, 66};
   }
   else if(VBias==56.31) { //DA AGGIUSTARE
     hfit_i= -20; hfit_f = 200;
-    range_i = {-5, 18, 39, 65, 86, 108, 150};
-    range_f = { 4, 25, 48, 70, 94, 114, 160};
+    range_i = {-5, 18, 39, 65, 86, 108};
+    range_f = { 4, 25, 48, 70, 94, 114};
+  }
+
+  else if(VBias==55.81) { //DA AGGIUSTARE
+    range_i = { -4, 14, 34, 55, 75, 95};
+    range_f = {2.5, 21, 41, 60, 78, 99};
   }
   
   TF1 *gfit[7];
-  for(int j=0; j<7; j++){
+  for(int j=0; j<6; j++){
     gfit[j] = new TF1("gfit", "gaus", hfit_i, hfit_f); //hard-coded
     hcf->Fit(gfit[j], "QS", " ", range_i[j], range_f[j]); //j_pe
     ch[j] = gfit[j]->GetParameter(1);
@@ -117,7 +122,7 @@ void analizza(
   
   //---- Plot (linear)
   cout<<"--- Linear fit ---"<<endl;
-  TGraphErrors *gr = new TGraphErrors(7, pe, m, epe, em);
+  TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
   gr->SetTitle(";pe;Gain");
   gr->SetMarkerStyle(8);
   gr->SetMarkerSize(0.1);
@@ -136,7 +141,7 @@ void analizza(
   gr->Draw("AP");
 
   //---- Fit plot (linear)
-  TF1 *l = new TF1("l", "[0]+[1]*x", -0.5, 6.5);
+  TF1 *l = new TF1("l", "[0]+[1]*x", -0.5, 5.5);
   l->SetLineColor(kPink-1);
   l->SetLineWidth(2);
   TFitResultPtr r = gr->Fit(l, "RS"); // Return fit result (important)
@@ -148,13 +153,13 @@ void analizza(
   cout<<"Intercetta = "<<A<<"+-"<<eA<<endl<<endl;
   double covAB = r->CovMatrix(0, 1);
 
-  double res[7], eres[7];
-  for(int i=0; i<7; i++){
+  double res[6], eres[6];
+  for(int i=0; i<6; i++){
     res[i]  = m[i]-l->Eval(pe[i]);
     eres[i] = em[i];
   }
 
-  TGraphErrors *gres = new TGraphErrors(7, pe, res, epe, eres);
+  TGraphErrors *gres = new TGraphErrors(6, pe, res, epe, eres);
   gres->SetMarkerStyle(8);
   gres->SetMarkerSize(0.5);
   gres->SetMarkerColor(kAzure-3);
@@ -173,7 +178,7 @@ void analizza(
   double xb[NB], yb[NB], eyb[NB];
 
   for(int i=0; i<NB; i++){
-    xb[i] = 6.5 * i / (NB-1);
+    xb[i] = 5.5 * i / (NB-1);
     yb[i] = 0;
     double sigma = sqrt(eA*eA + xb[i]*xb[i]*eB*eB + 2*xb[i]*covAB);
     eyb[i] = sigma;
@@ -193,7 +198,7 @@ void analizza(
 
   double minY = 1e9;
   double maxY = -1e9;
-  for(int i=0; i<7; i++){
+  for(int i=0; i<6; i++){
     double rmin = res[i] - eres[i];
     double rmax = res[i] + eres[i];
     if(rmin < minY) minY = rmin;
@@ -205,7 +210,7 @@ void analizza(
   band->Draw("3");
   gres->Draw("P SAME");
 
-  TLine *zero = new TLine(0,0,6.5,0);
+  TLine *zero = new TLine(0,0,5.5,0);
   zero->SetLineColor(kPink-1);
   zero->SetLineWidth(1);
   zero->Draw("same");
