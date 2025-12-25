@@ -53,7 +53,7 @@ void analizza(
 
   TH1F *hcf_t = (TH1F*)hc_t->Clone("hcf_t");
   
-  TCanvas *hc_fit_t = new TCanvas();
+  TCanvas *hc_fit_t = new TCanvas("hc_fit_t", "hc_fit_t");
   gPad->SetTicks(1,1);
   hcf_t->Draw();
   hcf_t->SetLineColor(kBlack);
@@ -112,12 +112,12 @@ void analizza(
   //---- Plot (linear)
   cout<<"--- Linear fit ---"<<endl;
   TGraphErrors *gr = new TGraphErrors(6, pe, m, epe, em);
-  gr->SetTitle(";pe;Gain");
+  gr->SetTitle("GainVSpe;pe;Gain");
   gr->SetMarkerStyle(20);
   gr->SetMarkerSize(0.5);
   gr->SetMarkerColor(color+2);
 
-  TCanvas *cgain = new TCanvas();
+  TCanvas *cgain = new TCanvas("lin","lin");
   cgain->Divide(1,2); 
 
   cgain->cd(1);
@@ -224,6 +224,10 @@ void analizza(
   zero->Draw("same");
 
   cgain->Write();
+  gr->SetName("gp");
+  gres->SetName("gpr");
+  gr->Write();
+  gres->Write();
   
   //---- Saving in TFile
   f->Write();
