@@ -173,6 +173,7 @@ void totale(
   cout<<endl;
   
   f->cd();
+  g->Write();	
   r->Write();
   rr->Write();
   c->Write();
