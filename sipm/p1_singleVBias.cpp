@@ -13,7 +13,7 @@ void analizza(
   //---- TFile as output
   if(output == "output.root"){
     output = file1;
-    output.ReplaceAll("alb", "VBias");
+    output.ReplaceAll("alberi/alb", "VBias");
     Ssiz_t last_underscore = output.Last('_');
     Ssiz_t dot_pos = output.Last('.');
     output.Remove(last_underscore, dot_pos - last_underscore);
@@ -22,7 +22,7 @@ void analizza(
   TFile *f = new TFile(output, "RECREATE");
 
   int first, second;
-  sscanf(file1.Data(), "alb_%d_%d_", &first, &second);
+  sscanf(file1.Data(), "alberi/alb_%d_%d_", &first, &second);
   double vbias = first + second / 100.0;
   
   cout<<endl<<"------> Analysis Single VBias (V): "<<vbias<<endl<<endl;
