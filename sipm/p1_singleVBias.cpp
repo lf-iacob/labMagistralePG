@@ -72,16 +72,17 @@ void analizza(
     range_i = {-3,  8, 23.5, 34, 48, 61};
     range_f = { 3, 17, 28  , 40, 54, 66};
   }
-  else if(vbias==56.31) { //DA AGGIUSTARE
-    color=kBlue;
-    range_i = {-5, 18, 39, 65, 86, 108};
-    range_f = { 4, 25, 48, 70, 94, 114};
-  }
   else if(vbias==55.81) { //DA AGGIUSTARE
-    color=kMagenta+1;
+    color=kBlue;
     range_i = { -4, 14, 34, 55, 75, 95};
     range_f = {2.5, 21, 41, 60, 78, 99};
   }
+  else if(vbias==56.31) { //DA AGGIUSTARE
+    color=kMagenta+1;
+    range_i = {-5, 18, 39, 65, 86, 108};
+    range_f = { 4, 25, 48, 70, 94, 114};
+  }
+
   
   TF1 *gfit[6];
   for(int j=0; j<6; j++){
