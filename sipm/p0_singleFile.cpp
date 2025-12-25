@@ -13,7 +13,7 @@ void albero(TString filename, TString output="output.root"){
     Ssiz_t pos = filename.First('_');
     TString suffix = filename(pos, filename.Length() - pos);
     suffix.ReplaceAll(".adc", ".root");
-    output = "alb" + suffix;
+    output = "alberi/alb" + suffix;
   }
   TFile *f = new TFile(output, "RECREATE");
 
