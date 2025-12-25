@@ -13,7 +13,7 @@ void analizza(
   //---- TFile as output
   if(output == "output.root"){
     output = file1;
-    output.ReplaceAll("alb", "ana");
+    output.ReplaceAll("alb", "VBias");
     Ssiz_t last_underscore = output.Last('_');
     Ssiz_t dot_pos = output.Last('.');
     output.Remove(last_underscore, dot_pos - last_underscore);
