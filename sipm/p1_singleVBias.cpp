@@ -78,7 +78,7 @@ void analizza(
     range_f = { 4, 25, 48, 70, 94, 114};
   }
   else if(vbias==55.81) { //DA AGGIUSTARE
-    color=kMagenta+2;
+    color=kMagenta+1;
     range_i = { -4, 14, 34, 55, 75, 95};
     range_f = {2.5, 21, 41, 60, 78, 99};
   }
@@ -204,7 +204,7 @@ void analizza(
   }
 
   TGraphErrors *band = new TGraphErrors(NB, xb, yb, 0, eyb);
-  band->SetFillColorAlpha(color-1, 0.35);
+  band->SetFillColorAlpha(color-4, 0.35);
   band->SetLineColor(color-3);
   band->SetFillStyle(1001);
 
@@ -224,8 +224,11 @@ void analizza(
   zero->Draw("same");
 
   cgain->Write();
+  band->SetName("band");
+  
   gr->SetName("gp");
   gres->SetName("gpr");
+  band->Write();
   gr->Write();
   gres->Write();
   
