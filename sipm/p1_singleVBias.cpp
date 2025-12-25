@@ -225,7 +225,7 @@ void analizza(
 
   cgain->Write();
   band->SetName("band");
-  
+  l->Write();
   gr->SetName("gp");
   gres->SetName("gpr");
   band->Write();
