@@ -8,8 +8,6 @@ void totale(
 	    TString file1, TString file2, TString file3, TString file4,
 	    TString output="LinearityVBias.root"
 	    ){
-  
-  TFile *f = new TFile(output, "RECREATE");
 
   int first, second; double vbias[F];
   TString files[F] = {file1, file2, file3, file4};
@@ -39,6 +37,8 @@ void totale(
     chi[j] = l[j]->GetChisquare();
     ndf[j] = l[j]->GetNDF();
   }
+
+  TFile *f = new TFile(output, "RECREATE");
 
   cout<<endl<<"------ Gain VS PE ------"<<endl;
   //---- Gain VS pe
@@ -170,8 +170,10 @@ void totale(
   zerov->SetLineWidth(1);
   zerov->Draw("SAME");
 
-  c->Write();
+  cout<<endl;
   
+  f->cd();
+  c->Write();
   f->Write();
   //f->Close();
 
