@@ -9,6 +9,8 @@ void totale(
 	    TString output="LinearityVBias.root"
 	    ){
 
+  TFile *f = new TFile(output, "RECREATE");
+  
   int first, second; double vbias[F];
   TString files[F] = {file1, file2, file3, file4};
   int color[F] = {kRed, kGreen+2, kBlue, kMagenta+1};
@@ -37,8 +39,6 @@ void totale(
     chi[j] = l[j]->GetChisquare();
     ndf[j] = l[j]->GetNDF();
   }
-
-  TFile *f = new TFile(output, "RECREATE");
 
   cout<<endl<<"------ Gain VS PE ------"<<endl;
   //---- Gain VS pe
@@ -71,7 +71,7 @@ void totale(
     gPad->SetGrid(1,1);
     gpr[j]->Draw("AP");
     lzero->Draw("SAME");
-    band[j]->SetFillColorAlpha(color[j]-4, 0.35);
+    band[j]->SetFillColorAlpha(color[j], 0.35);
     band[j]->Draw("3");
     legr[j] = new TLegend(0.13, 0.74, 0.25, 0.86);
     legr[j] -> AddEntry(gpr[j], Form("VBias: %.2f V", vbias[j]));
@@ -147,7 +147,7 @@ void totale(
   }
 
   TGraphErrors *bandv = new TGraphErrors(NB, xb, yb, 0, eyb);
-  bandv->SetFillColorAlpha(kPink+8, 0.35);
+  bandv->SetFillColorAlpha(kPink, 0.35);
   bandv->SetLineColor(kPink-9);
   bandv->SetFillStyle(1001);
 
@@ -173,6 +173,8 @@ void totale(
   cout<<endl;
   
   f->cd();
+  r->Write();
+  rr->Write();
   c->Write();
   f->Write();
   //f->Close();
