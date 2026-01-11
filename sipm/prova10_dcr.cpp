@@ -27,7 +27,7 @@ void dcr(
   double cspe[M], ecspe[M];
   TGraphErrors *g = (TGraphErrors*)file_lin->Get("Graph");
   for(int j=0; j<M; j++) {
-    cspe[j] = g->GetY()[j]*1.6e-7*pow(10, 32./20.);    //check la conversione
+    cspe[j] = g->GetY()[j]*1.6e-7*pow(10, 32./20.);  
     ecspe[j] = g->GetEY()[j]*1.6e-7*pow(10, 32./20.);
   }
   file_lin->Close();
