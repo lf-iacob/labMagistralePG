@@ -35,7 +35,7 @@ void wf(
 
   //--- Plot
   TGraph *gr = new TGraph(n, x, y);
-  gr->SetTitle("Waveform - single event;Time [ticks];Amplitude [ADCs]");
+  gr->SetTitle("Waveform - single event;Time (ticks);Amplitude (ADC)");
   gr->SetLineColor(kViolet+1);
   gr->SetLineWidth(3);
   gr->SetMarkerStyle(8);
