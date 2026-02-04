@@ -5,5 +5,6 @@ eseguire da terminale è la seguente:
 root wfs.root
 dd->Draw("a:Iteration$","Entry$==0","l") //disegna la singola wf
 dd->Draw("a:Iteration$") //disegna tutte le wfs sovrapposte
+dd->Draw("a:Iteration$", "Entry$ < 100"); //disegna solo le prime 100 wfs tutte sovrapposte
 dd->Draw("C>>h(500,0,600)") //disegna istogramma di carica in intervallo 0-600 con 500 bin
 dd->Draw("C>>h(500,-50,600)") //così si vede bene anche il picco della baseline
