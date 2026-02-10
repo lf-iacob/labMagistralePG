@@ -12,18 +12,18 @@ double vImag[SAMPLES];
 void setup() {
   Serial.begin(9600); // connessione tra Arduino e PC
   tone(7, 440);       // speaker
-  pinMode(9, OUTPUT); // trigger ultrasuoni
+  pinMode(11, OUTPUT); // trigger ultrasuoni
   pinMode(10, INPUT); // echo ultrasuoni
   pinMode(MIC_PIN, INPUT); // microfono
   pinMode(A0, INPUT); // sensore temperatura
 }
 
 float prendiDistanza(float vS) { // misura distanza
-  digitalWrite(9, LOW);
+  digitalWrite(11, LOW);
   delayMicroseconds(2);
-  digitalWrite(9, HIGH);
+  digitalWrite(11, HIGH);
   delayMicroseconds(10); 
-  digitalWrite(9, LOW);
+  digitalWrite(11, LOW);
   long durata = pulseIn(10, HIGH);
   return (durata * vS * 1e-6) / 2; // distanza in metri
 }
