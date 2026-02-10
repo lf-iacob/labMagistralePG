@@ -1,6 +1,5 @@
 // Tested frequencies (Hz): 440, 987.77, 1400
 
-
 float f = 440;            // frequency originally emitted by the speaker
 
 // setup function
