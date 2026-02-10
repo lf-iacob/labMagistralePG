@@ -1,7 +1,7 @@
 void setup() {
   Serial.begin(9600);
-  tone(7, 440);
-  pinMode(9, OUTPUT);
+  tone(7,440);
+  pinMode(9,OUTPUT);
   pinMode(10, INPUT);
 }
 
@@ -25,11 +25,14 @@ void loop() {
   if(d1<0.06)
     noTone(7);
   else
-    tone(7, 440);
+    tone(7,440);
   delay(100);
+  
   float d2 = prendiDistanza(vs);
+
   float vo = (d2 - d1) * 10;
-  Serial.print("Tempo: "); Serial.println(T);
-  Serial.print("Velocità Oggetto: "); 
+
+  Serial.print("Temp: "); Serial.println(T);
+  Serial.print(" Velocita Oggetto: "); 
   Serial.print(vo);
 }
