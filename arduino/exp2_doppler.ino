@@ -1,7 +1,7 @@
 void setup() {
   Serial.begin(9600);
-  tone(7,440);
-  pinMode(9,OUTPUT);
+  tone(7, 440);
+  pinMode(9, OUTPUT);
   pinMode(10, INPUT);
 }
 
