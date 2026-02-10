@@ -1,17 +1,17 @@
 void setup() {
   Serial.begin(9600); //connection between board and PC
   tone(7, 440); //speaker
-  pinMode(9, OUTPUT); //trigger ultrasound sensor
+  pinMode(11, OUTPUT); //trigger ultrasound sensor
   pinMode(10, INPUT); //echo ultrasound sensor
   pinMode(6, INPUT); //microphone
 }
 
 float prendiDistanza(float vS) { //measures distance
-  digitalWrite(9, LOW);
+  digitalWrite(11, LOW);
   delayMicroseconds(2);
-  digitalWrite(9, HIGH);
+  digitalWrite(11, HIGH);
   delayMicroseconds(10); 
-  digitalWrite(9, LOW);
+  digitalWrite(11, LOW);
   long durata = pulseIn(10, HIGH);
   return (durata * vS*1e-6) / 2;
 }
