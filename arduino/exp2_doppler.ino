@@ -17,7 +17,7 @@ float prendiDistanza(float vS) { //measures distance
 }
 
 void loop() {
-  float fm = analogRead(A1);
+  float fm = analogRead(A1); //microphone
   float vcampione = 0; //da vedere tramite sperimentazione quale è la fluttuazione da fermo
   float lettura = analogRead(A0);
   float voltaggio = lettura * (5.0 / 1024.0);
@@ -35,7 +35,7 @@ void loop() {
   Serial.print("Temp: "); Serial.println(T);
   Serial.print(" Velocita Oggetto: "); 
   Serial.print(vo);
-//calcolo effetto doppler aspettato
+  //calcolo effetto doppler aspettato
   if(vo>vcampione){
   float fd = 440*(vs/(vs-vo));
   Serial.print("frequenza shiftata: "); Serial.println(fd);
