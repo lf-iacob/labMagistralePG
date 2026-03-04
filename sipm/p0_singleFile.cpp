@@ -1,3 +1,4 @@
+
 // -- Single File analysis --
 
 #include <iostream>
@@ -19,21 +20,24 @@ void albero(TString filename, TString output="output.root"){
 
   //---- Create TTree
   int a[1024];
-  double b, c;
+  double b, c, amp;
   TTree* dd = new TTree("dd", "dd");
   dd->Branch("A", a, "a[1024]/I");
   dd->Branch("B", &b, "b/D");
   dd->Branch("C", &c, "c/D");
+  dd->Branch("AMP", &amp, "amp/D");
 
   //---- TTree->Fill()
   ifstream file;
   file.open(filename);
   while(file.good()){
-    b=0.; c=0.;
+    b=0.; c=0.; amp=5000.0;
     for(int i=0;i<1024;i++){
       file>>a[i];
+      if(a[i]<amp) amp = a[i]; 
       if(i<N) b+=double(a[i])/N;
       else if(i>=450 && i<=550) c+=(b-a[i])*2000./4096.*4./50.;
+      
     }
     dd->Fill();
   }
@@ -49,14 +53,25 @@ void albero(TString filename, TString output="output.root"){
   }
 
   TH1F *hcf = (TH1F*)hc->Clone("hc_f");
-  
+
   TCanvas *hc_fit = new TCanvas();
   gPad->SetTicks(1,1);
   hcf->Draw();
   hcf->SetLineColor(kBlack);
   //hcf->SetLineWidth(2);
   hcf->Sumw2();
+  
+
+  //---- Amplitude THistogram
+  TH1F *hamp = new TH1F("hamp", "Amplitude Histogram;Amplitude (ADC);Entries",500,1000,3000); //range to be modified
+  for(int i=0; i<n; i++) {
+    dd->GetEntry(i);
+    hamp->Fill(amp);
+  }
+  
+ 
 
   //---- Saving in TFile
   f->Write();
 }
+
