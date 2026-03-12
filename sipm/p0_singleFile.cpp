@@ -1,9 +1,9 @@
-
 // -- Single File analysis --
 
 #include <iostream>
 using namespace std;
 const int N=100; //data for baseline
+const int L=1024; //time window
 
 void albero(TString filename, TString output="output.root"){
 
@@ -19,9 +19,9 @@ void albero(TString filename, TString output="output.root"){
   TFile *f = new TFile(output, "RECREATE");
 
   //---- Create TTree
-  int a[1024];
+  int a[L];
   double b, c, amp;
-  TTree* dd = new TTree("dd", "dd");
+  TTree *dd = new TTree("dd", "dd");
   dd->Branch("A", a, "a[1024]/I");
   dd->Branch("B", &b, "b/D");
   dd->Branch("C", &c, "c/D");
@@ -31,13 +31,12 @@ void albero(TString filename, TString output="output.root"){
   ifstream file;
   file.open(filename);
   while(file.good()){
-    b=0.; c=0.; amp=5000.0;
-    for(int i=0;i<1024;i++){
-      file>>a[i];
-      if(a[i]<amp) amp = a[i]; 
+    b=0.; c=0.; amp=0;
+    for(int i=0;i<L;i++){
+      file>>a[i]; 
       if(i<N) b+=double(a[i])/N;
+      if((b-a[i])>amp) amp = b-a[i];
       else if(i>=450 && i<=550) c+=(b-a[i])*2000./4096.*4./50.;
-      
     }
     dd->Fill();
   }
@@ -63,13 +62,11 @@ void albero(TString filename, TString output="output.root"){
   
 
   //---- Amplitude THistogram
-  TH1F *hamp = new TH1F("hamp", "Amplitude Histogram;Amplitude (ADC);Entries",500,1000,3000); //range to be modified
+  TH1F *hamp = new TH1F("hamp", "Amplitude Histogram;Amplitude (ADC);Entries",500,-20,1000); //range to be modified
   for(int i=0; i<n; i++) {
     dd->GetEntry(i);
     hamp->Fill(amp);
   }
-  
- 
 
   //---- Saving in TFile
   f->Write();
