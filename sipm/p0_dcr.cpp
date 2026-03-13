@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 const int N=100; //data for baseline
-const int L=1024*8; //time window
+const int M=1024*8; //time window
 
 void albero_dcr(TString filename, TString output="output.root"){
 
@@ -19,7 +19,7 @@ void albero_dcr(TString filename, TString output="output.root"){
   TFile *f = new TFile(output, "RECREATE");
 
   //---- Create TTree
-  int a[L];
+  int a[M];
   double b, c;
   //double amp;
   TTree *dd = new TTree("dd", "dd");
@@ -33,7 +33,7 @@ void albero_dcr(TString filename, TString output="output.root"){
   file.open(filename);
   while(file.good()){
     b=0.; c=0.; //amp=0;
-    for(int i=0;i<L;i++){
+    for(int i=0;i<M;i++){
       file>>a[i]; 
       if(i<N) b+=double(a[i])/N;
       //if((b-a[i])>amp) amp = b-a[i];
