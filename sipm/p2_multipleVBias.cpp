@@ -52,8 +52,8 @@ void totale(
     if(j==3) gp[j]->Draw("AP");
     else gp[j]->Draw("SAME P");
     leg->AddEntry(gp[j],
-		  Form("%.2f V => A=%.0f+-%.0f, B=%.0f+-%.0f (#chi^{2}=%.0f/%d)",
-		       vbias[j], A[j], eA[j], B[j], eB[j], chi[j], ndf[j]),
+		  Form("%.2f V => A=%.0fe+03 +- %.0e, B=%.0fe+03 +- %.0e (#chi^{2}=%.0f/%d)",
+		       vbias[j], A[j]/1000, eA[j], B[j]/1000, eB[j], chi[j], ndf[j]), //hard-coded
 		  "lp");
   }
   leg -> Draw();
@@ -123,8 +123,10 @@ void totale(
     res[i]  = B[i]-fitg->Eval(vbias[i]);
     eres[i] = eB[i];
   }
+  double err=0.01/sqrt(12);
+  double vbias_err[4]={err, err, err, err};
 
-  TGraphErrors *gres = new TGraphErrors(4, vbias, res, 0, eres);
+  TGraphErrors *gres = new TGraphErrors(4, vbias, res, vbias_err, eres);
   gres->SetMarkerStyle(20);
   gres->SetMarkerSize(0.5);
   gres->SetMarkerColor(kBlack);
@@ -146,7 +148,7 @@ void totale(
     eyb[i] = sigma;
   }
 
-  TGraphErrors *bandv = new TGraphErrors(NB, xb, yb, 0, eyb);
+  TGraphErrors *bandv = new TGraphErrors(NB, xb, yb, vbias_err, eyb);
   bandv->SetFillColorAlpha(kPink, 0.35);
   bandv->SetLineColor(kPink-9);
   bandv->SetFillStyle(1001);
@@ -173,7 +175,7 @@ void totale(
   cout<<endl;
   
   f->cd();
-  g->Write();	
+  g->Write();
   r->Write();
   rr->Write();
   c->Write();
