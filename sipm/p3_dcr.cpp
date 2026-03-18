@@ -65,10 +65,11 @@ void dcr(TString file1, //.root (alberi)
   dceN_err=pp->GetParError(0);
   t=L*4*1e-9; //s
   dcr=dceN/t;
-  dcr_err=dceN_err/t; //sensibilità nel dominio delle frequenze?????????????????????????????????????????????
+  dcr_err=dceN_err/t; //SENSIBILITà NEL DOMINIO DELLE FREQUENZE?????????????????????????????????????????????
   cout<<endl<<"VBias: "<<vbias<<" (t = "<<t<<" s) -> DC Events: "<<dceN<<" +- "<<dceN_err<<endl;
   cout<<"    -----> DCR (Hz) = "<<dcr<<" +- "<<dcr_err<<endl<<endl;
 
+  
   /*
   TO DO: PRENDI DATI PER ALTRI VBIAS con giusta time window 
   TO DO: GRAFICO LINEARE - Residui?
@@ -78,7 +79,7 @@ void dcr(TString file1, //.root (alberi)
   cout<<endl<<"Digitare 0 se si vuole fare il grafico lineare ---> "<<endl;
   int p;
   double dcr_array[4], dcrerr_array[4], vbias_array[4]={54.51, 55.11, 55.81, 56.31},
-    vbiaserr_array[4]={0.01, 0.01, 0.01, 0.01}; //BOH, CERCHIAMO DI CAPIRE SE HA SENSO
+    vbiaserr_array[4]={0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12)}; //BOH, CERCHIAMO DI CAPIRE SE HA SENSO
   cin>>p;
   cout<<endl;
 
