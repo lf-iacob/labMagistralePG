@@ -69,7 +69,6 @@ void dcr(TString file1, //.root (alberi)
   cout<<endl<<"VBias: "<<vbias<<" (t = "<<t<<" s) -> DC Events: "<<dceN<<" +- "<<dceN_err<<endl;
   cout<<"    -----> DCR (Hz) = "<<dcr<<" +- "<<dcr_err<<endl<<endl;
 
-  
   /*
   TO DO: PRENDI DATI PER ALTRI VBIAS con giusta time window 
   TO DO: GRAFICO LINEARE - Residui?
