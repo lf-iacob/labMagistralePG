@@ -3,7 +3,7 @@ using namespace std;
 const int L=1024*8;
 
 void dcr(TString file1, //.root (alberi)
-	 TString output="DCRanalysis.root"
+	 double th, TString output="DCRanalysis.root"
 	 ){
 
   cout<<endl<<"------> Dark Count Rate Analysis "<<endl<<endl;
@@ -18,8 +18,7 @@ void dcr(TString file1, //.root (alberi)
      55.11 (40) -> 30
      55.81 (70) -> 50
      56.31 (200) -> 60
-   */
-  double th=30.0;        
+  */        
   cout<<"Threshold: "<<th<<endl<<endl;
 
   TFile *file1_aperto = TFile::Open(file1);
@@ -65,13 +64,14 @@ void dcr(TString file1, //.root (alberi)
   dceN=pp->GetParameter(0);
   dceN_err=pp->GetParError(0);
   t=L*4*1e-9; //s
-  dcr=dceN_err/t; //sensibilità nel dominio delle frequenze?????????????????????????????????????????????
+  dcr=dceN/t;
+  dcr_err=dceN_err/t; //sensibilità nel dominio delle frequenze?????????????????????????????????????????????
   cout<<endl<<"VBias: "<<vbias<<" (t = "<<t<<" s) -> DC Events: "<<dceN<<" +- "<<dceN_err<<endl;
   cout<<"    -----> DCR (Hz) = "<<dcr<<" +- "<<dcr_err<<endl<<endl;
 
   
   /*
-  TO DO: PRENDI DATI PER ALTRI VBIAS
+  TO DO: PRENDI DATI PER ALTRI VBIAS con giusta time window 
   TO DO: GRAFICO LINEARE - Residui?
   TO DO: PROPAGA L'ERRORE SUL DCR - capisci in che rapporto si trova con la sensibilità nel dominio delle frequenze
   */
