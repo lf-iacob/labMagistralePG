@@ -55,7 +55,7 @@ void dcr(TString file1, //.root (alberi)
   }
 
 
-  TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])",-1, 11);
+  TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])", 0, 11);
   //TF1 *pp = new TF1("pp","[1]*([0]^int(x)/TMath::Factorial(int(x)))*exp([0])",-0.5, 10.5);
   pp->SetNpx(10000);
   pp->SetParameters(2,1000);
@@ -110,7 +110,7 @@ void dcr(TString file1, //.root (alberi)
     fit_lin->SetLineWidth(2);
     fit_lin->Draw("SAME");
   }
-  cout<<endl<<endl;
+  cout<<endl;
   
   f->Write();
 
