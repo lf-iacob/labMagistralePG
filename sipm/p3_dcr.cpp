@@ -1,9 +1,9 @@
 #include <iostream>
 using namespace std;
-const int L=1024*8;
+const int L=1024*8; //----- TO BE MODIFIED
 
 void dcr(TString file1, //.root (alberi)
-	 double th, TString output="DCRanalysis.root"
+	 double th, TString output="output.root"
 	 ){
 
   cout<<endl<<"------> Dark Count Rate Analysis "<<endl<<endl;
@@ -13,7 +13,12 @@ void dcr(TString file1, //.root (alberi)
   double vbias = first + second / 100.0;
   cout<<"--> VBias (V): "<<vbias<<endl<<endl;
 
-  /* --------- MODIFICA A MANO: VBias (intensità) [V] -> THreshold [ADC]
+  if(output == "output.root"){
+    output = file1;
+    output.ReplaceAll("alberi/alb_dcr", "DCR");
+  }
+
+  /* --------- LEGEND: VBias (intensity) [V] -> Threshold [ADC]
      54.51 (250) -> 30
      55.11 (40) -> 30
      55.81 (70) -> 50
@@ -57,6 +62,7 @@ void dcr(TString file1, //.root (alberi)
 
   TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])", 0, 11);
   //TF1 *pp = new TF1("pp","[1]*([0]^int(x)/TMath::Factorial(int(x)))*exp([0])",-0.5, 10.5);
+  gStyle->SetOptFit(0111);
   pp->SetNpx(10000);
   pp->SetParameters(2,1000);
   double dceN, dceN_err, t, dcr, dcr_err;
