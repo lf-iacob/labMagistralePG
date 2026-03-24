@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-const int L=1024*8; //----- TO BE MODIFIED
+const int L=1024*8; //----- TO BE MODIFIED BY HAND
 
 void dcr(TString file1, //.root (alberi)
 	 double th, TString output="output.root"
@@ -18,11 +18,11 @@ void dcr(TString file1, //.root (alberi)
     output.ReplaceAll("alberi/alb_dcr", "DCR");
   }
 
-  /* --------- LEGEND: VBias (intensity) [V] -> Threshold [ADC]
+  /* --------- TO BE MODIFIED: VBias (intensity) [V] -> Threshold [ADC]
      54.51 (250) -> 30
      55.11 (40) -> 30
      55.81 (70) -> 50
-     56.31 (200) -> 60
+     56.31 (200, 230, 280) -> 60
   */        
   cout<<"Threshold: "<<th<<endl<<endl;
 
@@ -71,14 +71,13 @@ void dcr(TString file1, //.root (alberi)
   dceN_err=pp->GetParError(0);
   t=L*4*1e-9; //s
   dcr=dceN/t;
-  dcr_err=dceN_err/t; //SENSIBILITà NEL DOMINIO DELLE FREQUENZE?????????????????????????????????????????????
+  dcr_err=dceN_err/t;
   cout<<endl<<"VBias: "<<vbias<<" (t = "<<t<<" s) -> DC Events: "<<dceN<<" +- "<<dceN_err<<endl;
   cout<<"    -----> DCR (Hz) = "<<dcr<<" +- "<<dcr_err<<endl<<endl;
 
   
   /*
-  TO DO: PRENDI DATI PER ALTRI VBIAS con giusta time window 
-  TO DO: GRAFICO LINEARE - Residui?
+  TO DO: PRENDI DATI PER ALTRI VBIAS con giusta time window
   TO DO: PROPAGA L'ERRORE SUL DCR - capisci in che rapporto si trova con la sensibilità nel dominio delle frequenze
   */
 
@@ -98,6 +97,8 @@ void dcr(TString file1, //.root (alberi)
     }
     cout<<endl;
 
+    TCanvas *c1 = new TCanvas();
+    c1->SetGrid();
     TGraphErrors *dc_lin= new TGraphErrors(4, vbias_array, dcr_array, vbiaserr_array, dcrerr_array);
     dc_lin->SetTitle("Gain VS Vbias;Vbias (V);Gain");
     dc_lin->Draw("AP");
@@ -112,7 +113,7 @@ void dcr(TString file1, //.root (alberi)
     double covAB = rg->CovMatrix(0,1);
 
     TGraph *g_fitg = new TGraph(4, vbias_array, dcr_array);
-    fit_lin->SetLineColor(kRed-7);
+    fit_lin->SetLineColor(kAzure+3);
     fit_lin->SetLineWidth(2);
     fit_lin->Draw("SAME");
   }
