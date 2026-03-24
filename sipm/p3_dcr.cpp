@@ -62,7 +62,6 @@ void dcr(TString file1, //.root (alberi)
 
 
   TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])", 0, 12);
-  //TF1 *pp = new TF1("pp","[1]*([0]^int(x)/TMath::Factorial(int(x)))*exp([0])",-0.5, 10.5);
   gStyle->SetOptFit(0111);
   pp->SetNpx(10000);
   pp->SetParameters(2,1000);
