@@ -18,11 +18,12 @@ void dcr(TString file1, //.root (alberi)
     output.ReplaceAll("alberi/alb_dcr", "DCR");
   }
 
-  /* --------- TO BE MODIFIED: VBias (intensity) [V] -> Threshold [ADC]
+  /* --------- VBias (intensity) [V] -> Threshold [ADC]
      54.51 (250) -> 30
      55.11 (40) -> 30
      55.81 (70) -> 50
      56.31 (200, 230, 280) -> 60
+     57.01 (a sentimento) -> 70 
   */        
   cout<<"Threshold: "<<th<<endl<<endl;
 
@@ -53,14 +54,14 @@ void dcr(TString file1, //.root (alberi)
     outTree->Fill();
   }
 
-  TH1I *h_dce = new TH1I("h_dce", "DC Events Hist;DC Events;Events", 12, -1, 11); //-1.5, 10.5
+  TH1I *h_dce = new TH1I("h_dce", "DC Events Hist;DC Events;Events", 13, -1, 12); //-1.5, 10.5
   for(int i=0; i<n; i++) {
     outTree->GetEntry(i);
     h_dce->Fill(dce);
   }
 
 
-  TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])", 0, 11);
+  TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])", 0, 12);
   //TF1 *pp = new TF1("pp","[1]*([0]^int(x)/TMath::Factorial(int(x)))*exp([0])",-0.5, 10.5);
   gStyle->SetOptFit(0111);
   pp->SetNpx(10000);
@@ -75,48 +76,34 @@ void dcr(TString file1, //.root (alberi)
   cout<<endl<<"VBias: "<<vbias<<" (t = "<<t<<" s) -> DC Events: "<<dceN<<" +- "<<dceN_err<<endl;
   cout<<"    -----> DCR (Hz) = "<<dcr<<" +- "<<dcr_err<<endl<<endl;
 
+
+  double dcr_array[5]={47463.5, 66517.1, 87527.9, 92837.2, 105568},
+    dcrerr_array[5]={367.361, 439.797, 481.908, 495.836, 525.861},
+    vbias_array[5]={54.51, 55.11, 55.81, 56.31, 57.01},
+    vbiaserr_array[5]={0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12)};
+  for(int i=0; i<5; i++)
+    cout<<"VBias (V): "<<vbias_array[i]<<" => DCR = "<<dcr_array[i]<<" +- "<<dcrerr_array[i]<<endl;
+
+  TCanvas *c1 = new TCanvas();
+  c1->SetGrid();
+  TGraphErrors *dc_lin= new TGraphErrors(5, vbias_array, dcr_array, vbiaserr_array, dcrerr_array);
+  dc_lin->SetTitle("DCR VS Vbias;Vbias (V);DCR (Hz)");
+  dc_lin->Draw("AP");
+
+  TF1 *fit_lin = new TF1("fit_lin", "[0]+[1]*x", 54.4, 57.2);
+  dc_lin->Fit(fit_lin, "R");
+  TFitResultPtr rg = dc_lin->Fit(fit_lin, "RS");
+  double A = fit_lin->GetParameter(0);
+  double eA = fit_lin->GetParError(0);
+  double B = fit_lin->GetParameter(1);
+  double eB = fit_lin->GetParError(1);
+  double covAB = rg->CovMatrix(0,1);
+
+  TGraph *g_fitg = new TGraph(5, vbias_array, dcr_array);
+  fit_lin->SetLineColor(kAzure-5);
+  fit_lin->SetLineWidth(3);
+  fit_lin->Draw("SAME");
   
-  /*
-  TO DO: PRENDI DATI PER ALTRI VBIAS con giusta time window
-  TO DO: PROPAGA L'ERRORE SUL DCR - capisci in che rapporto si trova con la sensibilità nel dominio delle frequenze
-  */
-
-  cout<<endl<<"Digitare 0 se si vuole fare il grafico lineare ---> "<<endl;
-  int p;
-  double dcr_array[4], dcrerr_array[4], vbias_array[4]={54.51, 55.11, 55.81, 56.31},
-    vbiaserr_array[4]={0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12)}; //BOH, CERCHIAMO DI CAPIRE SE HA SENSO
-  cin>>p;
-  cout<<endl;
-
-  if(p==0){
-    for(int i=0; i<4; i++){
-      cout<<"VBias (V): "<<vbias_array[i]<<" => DCR = ";
-      cin>>dcr_array[i];
-      cout<<" DCR_err = ";
-      cin>>dcrerr_array[i];
-    }
-    cout<<endl;
-
-    TCanvas *c1 = new TCanvas();
-    c1->SetGrid();
-    TGraphErrors *dc_lin= new TGraphErrors(4, vbias_array, dcr_array, vbiaserr_array, dcrerr_array);
-    dc_lin->SetTitle("Gain VS Vbias;Vbias (V);Gain");
-    dc_lin->Draw("AP");
-
-    TF1 *fit_lin = new TF1("fit_lin", "[0]+[1]*x", 54.4, 56.4);
-    dc_lin->Fit(fit_lin, "R");
-    TFitResultPtr rg = dc_lin->Fit(fit_lin, "RS");
-    double A = fit_lin->GetParameter(0);
-    double eA = fit_lin->GetParError(0);
-    double B = fit_lin->GetParameter(1);
-    double eB = fit_lin->GetParError(1);
-    double covAB = rg->CovMatrix(0,1);
-
-    TGraph *g_fitg = new TGraph(4, vbias_array, dcr_array);
-    fit_lin->SetLineColor(kAzure+3);
-    fit_lin->SetLineWidth(2);
-    fit_lin->Draw("SAME");
-  }
   cout<<endl;
   
   f->Write();
