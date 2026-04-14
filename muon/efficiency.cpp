@@ -4,6 +4,7 @@
 #include <vector>
 using namespace std;
 
+
 void eff(){
 
   // ---- Dataset (1806V: 15min, altri: 3 min)
@@ -26,7 +27,6 @@ void eff(){
   AC->SetTitle("Counts AC;VSet (V);A and C");
   AC->SetMarkerStyle(20);
   AC->SetMarkerColor(kViolet-3);
-  c1->cd();
   AC->Draw("AP");
 
   TCanvas *c2 = new TCanvas();
@@ -34,7 +34,6 @@ void eff(){
   ABC->SetTitle("Counts ABC;VSet (V);(A and C) and B");
   ABC->SetMarkerStyle(20);
   ABC->SetMarkerColor(kTeal-5);
-  c2->cd();
   ABC->Draw("AP");
 
   // ---- Hist Data
@@ -73,17 +72,21 @@ void eff(){
   G_eff->SetTitle("Efficiency handmade;VSet (V);Efficiency");
   G_eff->SetMarkerStyle(22);
   G_eff->SetMarkerColor(kPink-8);
-  c3->cd();
+  c3->SetGrid();
+  G_eff->SetMinimum(-0.05);
   G_eff->Draw("AP");
      // ROOT method
   TCanvas *c4 = new TCanvas();
   TGraphAsymmErrors *m_eff = new TGraphAsymmErrors();
-  m_eff->Divide(hABC, hAC); //to play with
+  m_eff->Divide(hABC, hAC);
          /* 3^ parametro in ingresso = stringa con il metodo
 	    "B" binomiale, "b(.,.)" bayesian, "cp" Clopper–Pearson esplicito, "w" Wilson, "ac" Agresti–Coull */
   m_eff->SetTitle("Efficiency methods;VSet (V);Efficiency");
   m_eff->SetMarkerStyle(21);
   m_eff->SetMarkerColor(kGreen+2);
+  c4->SetGrid();
+  m_eff->SetMinimum(-0.05);
   m_eff->Draw("AP");
   
+
 }
