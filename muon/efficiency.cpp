@@ -7,23 +7,27 @@ using namespace std;
 
 void eff(){
 
-  // ---- Dataset (1806V: 15min, altri: 3 min)
-  // -> PROVA 1:
+  // ---- Dataset
+      // -> PROVA 1:
       // vector<double> vset      = {1108, 1209, 1304, 1406, 1501, 1604, 1712, 1806};  //correggi unità di misura
       // vector<double> countAC   = {552,  489,  545,  565,  546, 559,  544,  3272};
       // vector<double> countABC  = {3,    19,   126,  363,  342,  335,  339, 1928};
-  // -> PROVA 2:
-  vector<double> vset      = {1108, 1209, 1240, 1273, 1304, 1340, 1371, 1406,    1440, 1470, 1501, 1604, 1712, 1806}; 
-  vector<double> countAC   = {552,  489,  669,  617,   545, 605,  685,  565  , 787,  692,  546, 559,  544,  3272};
-  vector<double> countABC  = {3,    19,   31,   71,    126, 223,  331,  363  , 387,  341,  342,  335,  339, 1928};
+      // -> PROVA 2:
+  vector<double> vset     = {1108, 1209, 1240, 1273, 1304, 1340, 1371, 1406, 1440, 1470, 1501, 1544, 1573, 1604, 1642, 1794, 1900, 2006, 2099};
+  vector<double> countAC  = {552,  489,  669,  617,   545, 605,  685,  656,  656,  651,  685,  629,  735,   637,  646,  628, 634,  614,  660};
+  vector<double> countABC = {3,    19,   31,   71,    126, 223,  331,  347,  356,  327,  349,  328,  409,   378,  391,  427, 413,  412,  468};
   
   int n = vset.size();
-  vector<double> err_vset, eff, err_eff;
+  vector<double> err_vset, eff, err_eff, eff0, err_eff0;
 
   // ---- Efficiency estimation
   for(int j=0 ; j<n ; j++){
+    //binomial handmade
     eff.push_back(countABC[j]/countAC[j]);
-    err_eff.push_back(sqrt(eff[j]*(1-eff[j])/countAC[j]));   //binomial error by hand
+    err_eff.push_back(sqrt(eff[j]*(1-eff[j])/countAC[j]));
+    //bayesian handmade
+    eff0.push_back((countABC[j]+1)/(countAC[j]+2));
+    err_eff0.push_back(sqrt(eff[j]*(1-eff[j])/(countAC[j]+3)));
     err_vset.push_back(0.0);                                 //MODIFICA incertezza tensione!!
   }
 
@@ -75,27 +79,35 @@ void eff(){
      // Binomial error by hand
   TCanvas *c3 = new TCanvas();
   TGraphErrors *G_eff = new TGraphErrors(n, &vset[0], &eff[0], &err_vset[0], &err_eff[0]);
-  G_eff->SetTitle("Efficiency handmade;VSet (V);Efficiency");
+  G_eff->SetTitle("Efficiency handmade binomial;VSet (V);Efficiency");
   G_eff->SetMarkerStyle(22);
   G_eff->SetMarkerColor(kPink-8);
   c3->SetGrid();
   G_eff->SetMinimum(-0.05);
   G_eff->Draw("AP");
-     // ROOT method
+        // Bayesian method by hand
+  TCanvas *c30 = new TCanvas();
+  TGraphErrors *G_eff0 = new TGraphErrors(n, &vset[0], &eff0[0], &err_vset[0], &err_eff0[0]);
+  G_eff0->SetTitle("Efficiency handmade bayesian;VSet (V);Efficiency");
+  G_eff0->SetMarkerStyle(22);
+  G_eff0->SetMarkerColor(kGreen+2);
+  c30->SetGrid();
+  G_eff0->SetMinimum(-0.05);
+  G_eff0->Draw("AP");
+  
+  /* ROOT default method
   TCanvas *c4 = new TCanvas();
   TGraphAsymmErrors *m_eff = new TGraphAsymmErrors();
   m_eff->Divide(hABC, hAC);
-         /* 3^ parametro in ingresso = stringa con il metodo
-	    "B" binomiale, "b(.,.)" bayesian, "cp" Clopper–Pearson esplicito, "w" Wilson, "ac" Agresti–Coull */
+         //3^ parametro in ingresso = stringa con il metodo -> "B" binomiale, "b(.,.)" bayesian, "cp" Clopper–Pearson esplicito, "w" Wilson, "ac" Agresti–Coull
   m_eff->SetTitle("Efficiency methods: Binomial;VSet (V);Efficiency");
   m_eff->SetMarkerStyle(21);
   m_eff->SetMarkerColor(kGreen+2);
   c4->SetGrid();
   m_eff->SetMinimum(-0.05);
-  m_eff->Draw("AP");
+  m_eff->Draw("AP");*/
 
-
-  // ---- Efficiency VS VSet (tutti i metodi sovrapposti)
+  // ---- Efficiency VS VSet (tutti i metodi ROOT sovrapposti)
   TCanvas *c5 = new TCanvas();
   c5->SetGrid();
   vector<string> methods = {"", "cp", "ac", "w"}; 
@@ -128,4 +140,23 @@ void eff(){
   }
   leg->Draw();
 
+
+  // ---- Fit con Erf sugli handmade
+  TF1 *f_erf = new TF1("f_erf",
+		       "[2]*(1+TMath::Erf((x-[0])/(sqrt(2)*[1])))",
+		       vset.front(), vset.back()
+		       );
+  f_erf->SetParameters(100,1400, 100);
+  f_erf->SetParNames("N", "Mean", "Sigma");
+     // Fit su binomiale
+  c3->cd();
+  G_eff->Fit(f_erf, "R");
+  f_erf->SetLineColor(kRed);
+  f_erf->Draw("SAME");
+     // Fit su bayesiano
+  TF1 *f_erf2 = (TF1*)f_erf->Clone("f_erf2");
+  c30->cd();
+  G_eff0->Fit(f_erf2, "R");
+  f_erf2->SetLineColor(kBlue);
+  f_erf2->Draw("SAME");
 }
