@@ -8,9 +8,15 @@ using namespace std;
 void eff(){
 
   // ---- Dataset (1806V: 15min, altri: 3 min)
-  vector<double> vset      = {1108, 1209, 1304, 1406, 1501, 1604, 1712, 1806};  //correggi unità di misura
-  vector<double> countAC   = {552,  489,  545,  565,  546, 559,  544,  3272};
-  vector<double> countABC  = {3,    19,   126,  363,  342,  335,  339, 1928};
+  // -> PROVA 1:
+      // vector<double> vset      = {1108, 1209, 1304, 1406, 1501, 1604, 1712, 1806};  //correggi unità di misura
+      // vector<double> countAC   = {552,  489,  545,  565,  546, 559,  544,  3272};
+      // vector<double> countABC  = {3,    19,   126,  363,  342,  335,  339, 1928};
+  // -> PROVA 2:
+  vector<double> vset      = {1108, 1209, 1240, 1273, 1304, 1340, 1371, 1406,    1440, 1470, 1501, 1604, 1712, 1806}; 
+  vector<double> countAC   = {552,  489,  669,  617,   545, 605,  685,  565  , 787,  692,  546, 559,  544,  3272};
+  vector<double> countABC  = {3,    19,   31,   71,    126, 223,  331,  363  , 387,  341,  342,  335,  339, 1928};
+  
   int n = vset.size();
   vector<double> err_vset, eff, err_eff;
 
@@ -81,12 +87,45 @@ void eff(){
   m_eff->Divide(hABC, hAC);
          /* 3^ parametro in ingresso = stringa con il metodo
 	    "B" binomiale, "b(.,.)" bayesian, "cp" Clopper–Pearson esplicito, "w" Wilson, "ac" Agresti–Coull */
-  m_eff->SetTitle("Efficiency methods;VSet (V);Efficiency");
+  m_eff->SetTitle("Efficiency methods: Binomial;VSet (V);Efficiency");
   m_eff->SetMarkerStyle(21);
   m_eff->SetMarkerColor(kGreen+2);
   c4->SetGrid();
   m_eff->SetMinimum(-0.05);
   m_eff->Draw("AP");
-  
+
+
+  // ---- Efficiency VS VSet (tutti i metodi sovrapposti)
+  TCanvas *c5 = new TCanvas();
+  c5->SetGrid();
+  vector<string> methods = {"", "cp", "ac", "w"}; 
+  vector<int> colors = {kGreen+2, kRed, kBlue, kOrange-3};
+  TLegend *leg = new TLegend(0.15,0.7,0.4,0.9);
+  vector<TGraphAsymmErrors*> graphs;
+  for (int i = 0; i < methods.size(); i++) {
+    TGraphAsymmErrors *g = new TGraphAsymmErrors();
+    if(methods[i] == "")
+      g->Divide(hABC, hAC);        // default ROOT (binomiale)
+    else
+      g->Divide(hABC, hAC, methods[i].c_str());
+    g->SetMarkerStyle(20 + i);
+    g->SetMarkerColor(colors[i]);
+    g->SetLineColor(colors[i]);
+    if(i == 0){
+      g->SetTitle("Efficiency methods: Comparison;VSet (V);Efficiency");
+      g->SetMinimum(-0.05);
+      g->Draw("AP");
+    } else {
+      g->Draw("P SAME");
+    }
+    string label;
+    if(methods[i] == "") label = "Binomial (default)";
+    else if(methods[i] == "cp") label = "Clopper-Pearson";
+    else if(methods[i] == "w") label = "Wilson";
+    else if(methods[i] == "ac") label = "Agresti-Coull";
+    leg->AddEntry(g, label.c_str(), "p");
+    graphs.push_back(g);
+  }
+  leg->Draw();
 
 }
