@@ -54,21 +54,27 @@ void lt(TString filename1, TString filename2, TString output="output.root"){
   int n = dd->GetEntries();
 
   //time histogram
-  TH1I *ht = new TH1I("ht", "Time Histogram;Time (ns);Entries",500,600,25000);
+  TH1I *ht = new TH1I("ht", "Time Histogram;Time (ns);Entries",300,600,23400); //up: 300, 600, 25000; down: 300, 600, 23400
   for(int i=0; i<n; i++) {
     dd->GetEntry(i);
     ht->Fill(t);
   }
 
-  TF1 *ee = new TF1("ee","[0]*exp(-x/[1])+[2]", 600, 25000);
+  TF1 *ee = new TF1("ee","[0]*exp(-x/[1])+[2]", 600, 23400);
   gStyle->SetOptFit(0111);
-  ee->SetParameters(100, 2000, 10);
+  ee->SetParameters(500, 2000, 300); //up: 100, 2000, 10; down: 500, 2000, 300
   double tau, tau_err;
-  ht -> Fit(ee); 
+  ht->SetLineColor(kGreen+2);
+  //ht->SetLineWidth(2);
+  ht->SetFillColor(kGreen+2);
+  ht->SetFillStyle(3005);
+  ee->SetLineColor(kPink-3);
+  ee->SetLineWidth(3);
+  ht->Fit(ee); 
   tau=ee->GetParameter(1);
   tau_err=ee->GetParError(1);
   
-  cout << "Tau = " << tau << " +/- " << tau_err << endl;
+  cout<<"Tau = "<<tau<<" +/- "<<tau_err<<endl;
 
   ht->Write();
   ee->Write();
