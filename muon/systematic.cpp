@@ -1,7 +1,5 @@
 // Tau stima finale con errori sistematici
 
-
-
 using namespace std;
 #include <iostream>
 const int L=8*1024;
@@ -77,8 +75,8 @@ void lt(TString filename1, TString filename2, TString output="output.root"){
       TString namef = Form("ee%d%d",j,k);
       ee[j][k]= new TF1(namef,"[0]*exp(-x/[1])+[2]", 600+100*k, 23400);
       gStyle->SetOptFit(0111);
-      ee[j][k]->SetParameters(500, 2000, 300); 
-      ht[j][k]->Fit(ee[j][k]);
+      ee[j][k]->SetParameters(500, 2000, 100);  //down:500, 2000, 300
+      ht[j][k]->Fit(ee[j][k],"Q0");
       tau[j][k]=ee[j][k]->GetParameter(1);
       tau_err[j][k]=ee[j][k]->GetParError(1);
       ee[j][k]->Write();
