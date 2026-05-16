@@ -73,15 +73,15 @@ void lt(TString filename1, TString filename2, TString output="output.root"){
     dd->GetEntry(i);
     ht->Fill(t);
   }
-
-  TF1 *ee = new TF1("ee","[0]*exp(-x/[1])+[2]", 600, 23400);
-  gStyle->SetOptFit(0);
-  ee->SetParameters(par_norm, 2000, par_plateau);
-  double tau, tau_err, norm, plateau, chi2, gdl;
   ht->SetLineColor(col_hist);
   //ht->SetLineWidth(2);
   ht->SetFillColor(col_hist);
   ht->SetFillStyle(3005);
+  
+  TF1 *ee = new TF1("ee","[0]*exp(-x/[1])+[2]", 600, 23400);
+  gStyle->SetOptFit(0);
+  ee->SetParameters(par_norm, 2000, par_plateau);
+  double tau, tau_err, norm, plateau, chi2, gdl;
   ee->SetLineColor(col_fit);
   ee->SetLineWidth(3);
   ht->Fit(ee);
@@ -109,5 +109,4 @@ void lt(TString filename1, TString filename2, TString output="output.root"){
   ht->Write();
   ee->Write();
   f->Write();
-
 }
