@@ -44,6 +44,7 @@ void sys(TString fileroot, TString output="output.root") {
       for(int i=0; i<n; i++){
 	dd->GetEntry(i);
 	ht[j][k]->Fill(t);
+	ht[j][k]->SetDirectory(0);
       }
     }
   }
@@ -65,8 +66,8 @@ void sys(TString fileroot, TString output="output.root") {
   // 3D Graph
   TCanvas *c2d_1 = new TCanvas();
   TH2D *h2_tau = new TH2D("h2_tau", "#tau histogram;Binning;Width Range;#tau (ns)", 
-			  P, 200, 1200,  
-			  P, 22750, 23350);
+			  P, 300, 3300,  
+			  P, 22050, 22800);
   for(int j=0; j<P; j++) {
     for(int k=0; k<P; k++) {
       h2_tau->SetBinContent(j+1, k+1, tau[j][k]);
@@ -98,7 +99,7 @@ void sys(TString fileroot, TString output="output.root") {
   
   //total hist
   TCanvas *c = new TCanvas();
-  TH1I *h_tau = new TH1I("htau", "Tau Histogram;Tau (ns);Entries",17,2100,2300);
+  TH1I *h_tau = new TH1I("htau", "Tau Histogram;Tau (ns);Entries",100,2000,2400);
   for(int l=0; l<P; l++) {
     for(int m=0; m<P; m++){
       h_tau->Fill(tau[l][m]);
@@ -113,6 +114,9 @@ void sys(TString fileroot, TString output="output.root") {
   h_tau->Write();
   h2_tau->Write();
   g2_tau->Write();
+  c2d_1->Write();
+  c2d_2->Write();
+  c->Write();
   f->Write();
   file_aperto->Close();
 }
