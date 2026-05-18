@@ -130,7 +130,7 @@ void sys(TString fileroot, TString output="output.root") {
   
   //total hist
   TCanvas *c = new TCanvas();
-  TH1I *h_tau = new TH1I("htau", "Tau Histogram;Tau (ns);Entries",200,1800,2400);
+  TH1I *h_tau = new TH1I("htau", "Tau Histogram;Tau (ns);Entries",50,2000,2300);
   for(int l=0; l<P; l++) {
     for(int m=0; m<P; m++){
       h_tau->Fill(tau[l][m]);
