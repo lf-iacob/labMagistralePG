@@ -27,7 +27,7 @@ void sys(TString fileroot, TString output="output.root") {
   ele_type.ReplaceAll(".root", "");
   ele_type.ReplaceAll("tree_", "");
   cout<<"DATATYPE: Electrons "<<ele_type<<endl<<endl;
-  if(output=="output.root") output="sys_" + ele_type + ".root";
+  if(output=="output.root") output="sys_" + ele_type + "_P" + P + ".root";
   int par_plateau=10, col_hist=kAzure-5, col_3d=kDeepSea, col_mark=kBlue;
   if (ele_type == "down") {
     par_plateau=300;
