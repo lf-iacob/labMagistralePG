@@ -5,7 +5,11 @@
 using namespace std;
 
 
-void eff(){
+void eff(TString output="eff.root"){
+  gStyle->SetOptFit(111);
+
+  TFile *f = new TFile(output, "RECREATE");
+  f->cd();
 
   // ---- Dataset
       // -> PROVA 1:
@@ -13,9 +17,13 @@ void eff(){
       // vector<double> countAC   = {552,  489,  545,  565,  546, 559,  544,  3272};
       // vector<double> countABC  = {3,    19,   126,  363,  342,  335,  339, 1928};
       // -> PROVA 2:
-  vector<double> vset     = {1108, 1209, 1240, 1273, 1304, 1340, 1371, 1406, 1440, 1470, 1501, 1544, 1573, 1604, 1642, 1794, 1900, 2006, 2099};
-  vector<double> countAC  = {552,  489,  669,  617,   545, 605,  685,  656,  656,  651,  685,  629,  735,   637,  646,  628, 634,  614,  660};
-  vector<double> countABC = {3,    19,   31,   71,    126, 223,  331,  347,  356,  327,  349,  328,  409,   378,  391,  427, 413,  412,  468};
+      // vector<double> vset   = {1108, 1209, 1240, 1273, 1304, 1340, 1371, 1406, 1440, 1470, 1501, 1544, 1573, 1604, 1642, 1794, 1900, 2006, 2099};
+      // vector<double> countAC  = {552,  489,  669,  617,  545,  605,  685,  656,  656,  651,  685,  629,  735,   637,  646,  628, 634,  614,  660};
+      // vector<double> countABC = {3,    19,   31,   71,   126,  223,  331,  347,  356,  327,  349,  328,  409,   378,  391,  427, 413,  412,  468};
+      // -> PROVA 3: mantenuti quelli di prima fino a 1304
+  vector<double> vset     = {1200, 1250, 1300, 1323, 1350, 1411, 1502, 1602, 1702, 1802, 1904, 2005, 2100};
+  vector<double> countAC  = {386,  346,  371,  393,  355,  350,  363,  312,  387,  353,  379,  354,  384};
+  vector<double> countABC = {4,    24,   78,   117,  154,  158,  187,  170,  212,  195,  201,  205,  214};
   
   int n = vset.size();
   vector<double> err_vset, eff, err_eff, eff0, err_eff0;
@@ -28,23 +36,27 @@ void eff(){
     //bayesian handmade
     eff0.push_back((countABC[j]+1)/(countAC[j]+2));
     err_eff0.push_back(sqrt(eff[j]*(1-eff[j])/(countAC[j]+3)));
-    err_vset.push_back(0.0);                                 //MODIFICA incertezza tensione!!
+    err_vset.push_back(vset[j]*0.01);    //(Somma in quadratura con errore voltmetro, ma pesa poco)
   }
 
   // ---- TGraph Data
   TCanvas *c1 = new TCanvas();
+  c1->SetGrid();
   TGraph *AC = new TGraph(n, &vset[0], &countAC[0]);
   AC->SetTitle("Counts AC;VSet (V);A and C");
   AC->SetMarkerStyle(20);
   AC->SetMarkerColor(kViolet-3);
   AC->Draw("AP");
+  c1->Write();
 
   TCanvas *c2 = new TCanvas();
+  c2->SetGrid();
   TGraph *ABC = new TGraph(n, &vset[0], &countABC[0]);
   ABC->SetTitle("Counts ABC;VSet (V);(A and C) and B");
   ABC->SetMarkerStyle(20);
   ABC->SetMarkerColor(kTeal-5);
   ABC->Draw("AP");
+  c2->Write();
 
   // ---- Hist Data
   vector<double> edges(n+1); //bins
@@ -66,6 +78,7 @@ void eff(){
   hAC->SetBarWidth(0.8);
   hAC->Sumw2();
   hAC->Draw("bar");
+  ch1->Write();
   TCanvas *ch2 = new TCanvas();
   hABC->SetLineColor(kTeal-5);
   hABC->SetLineWidth(2);
@@ -74,6 +87,7 @@ void eff(){
   hABC->SetBarWidth(0.8);
   hABC->Sumw2();
   hABC->Draw("bar");
+  ch2->Write();
 
   // ---- Efficiency VS VSet
      // Binomial error by hand
@@ -85,6 +99,7 @@ void eff(){
   c3->SetGrid();
   G_eff->SetMinimum(-0.05);
   G_eff->Draw("AP");
+  
         // Bayesian method by hand
   TCanvas *c30 = new TCanvas();
   TGraphErrors *G_eff0 = new TGraphErrors(n, &vset[0], &eff0[0], &err_vset[0], &err_eff0[0]);
@@ -105,14 +120,15 @@ void eff(){
   m_eff->SetMarkerColor(kGreen+2);
   c4->SetGrid();
   m_eff->SetMinimum(-0.05);
-  m_eff->Draw("AP");*/
+  m_eff->Draw("AP");
+  c4->Write();*/
 
   // ---- Efficiency VS VSet (tutti i metodi ROOT sovrapposti)
   TCanvas *c5 = new TCanvas();
   c5->SetGrid();
   vector<string> methods = {"", "cp", "ac", "w"}; 
   vector<int> colors = {kGreen+2, kRed, kBlue, kOrange-3};
-  TLegend *leg = new TLegend(0.15,0.7,0.4,0.9);
+  TLegend *leg = new TLegend(0.65,0.15,0.88,0.3);
   vector<TGraphAsymmErrors*> graphs;
   for (int i = 0; i < methods.size(); i++) {
     TGraphAsymmErrors *g = new TGraphAsymmErrors();
@@ -120,6 +136,10 @@ void eff(){
       g->Divide(hABC, hAC);        // default ROOT (binomiale)
     else
       g->Divide(hABC, hAC, methods[i].c_str());
+    for (int l=0; l<n; l++) { //errore su asse x
+      g->SetPointEXlow(l, err_vset[l]);
+      g->SetPointEXhigh(l, err_vset[l]);
+    }
     g->SetMarkerStyle(20 + i);
     g->SetMarkerColor(colors[i]);
     g->SetLineColor(colors[i]);
@@ -139,6 +159,7 @@ void eff(){
     graphs.push_back(g);
   }
   leg->Draw();
+  c5->Write();
 
 
   // ---- Fit con Erf sugli handmade
@@ -153,10 +174,16 @@ void eff(){
   G_eff->Fit(f_erf, "R");
   f_erf->SetLineColor(kRed);
   f_erf->Draw("SAME");
+  c3->Update();
+  c3->Write();
      // Fit su bayesiano
   TF1 *f_erf2 = (TF1*)f_erf->Clone("f_erf2");
   c30->cd();
   G_eff0->Fit(f_erf2, "R");
   f_erf2->SetLineColor(kBlue);
   f_erf2->Draw("SAME");
+  c30->Update();
+  c30->Write();
+
+  f->Write();
 }
