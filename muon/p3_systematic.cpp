@@ -60,7 +60,7 @@ void sys(TString fileroot, TString output="output.root") {
   for(int j=0; j<P; j++){
     for(int k=0; k<P; k++) {
       TString nameh = Form("ht%d%d",j,k);
-      ht[j][k]= new TH1I(nameh, "Time Histogram;Time (ns);Entries",300+200*j,600+50*k,23400);
+      ht[j][k]= new TH1I(nameh, "Time Histogram;Time (ns);Entries",300+400*j,600+150*k,23400); //200, 50
       for(int i=0; i<n; i++){
 	dd->GetEntry(i);
 	ht[j][k]->Fill(t);
@@ -81,13 +81,11 @@ void sys(TString fileroot, TString output="output.root") {
   for(int j=0; j<P; j++){
     for(int k=0; k<P; k++){
       TString namef = Form("ee%d%d",j,k);
-      ee[j][k]= new TF1(namef,"[0]*exp(-x/[1])+[2]", 600+50*k, 23400);
+      ee[j][k]= new TF1(namef,"[0]*exp(-x/[1])+[2]", 600+150*k, 23400);
       ee[j][k]->SetParameters(400, 2000, par_plateau);
       ht[j][k]->Fit(ee[j][k],"Q0");
-      if(ee[j][k]->GetParameter(1)>1600){
-	tau[j][k]=ee[j][k]->GetParameter(1);
-	tau_err[j][k]=ee[j][k]->GetParError(1);
-      }
+      tau[j][k]=ee[j][k]->GetParameter(1);
+      tau_err[j][k]=ee[j][k]->GetParError(1);
     }
   }
   
@@ -115,8 +113,10 @@ void sys(TString fileroot, TString output="output.root") {
   int nPoint = 0;
   for(int j=0; j<P; j++) {
     for(int k=0; k<P; k++) {
-      g2_tau->SetPoint(nPoint, (300+200*j), (23400-600-50*k), tau[j][k]);
-      nPoint++;
+      if(tau[j][k]>1800){
+	g2_tau->SetPoint(nPoint, (300+400*j), (23400-600-150*k), tau[j][k]);
+	nPoint++;
+      }
     }
   }
   TCanvas *c2d_2 = new TCanvas();
@@ -130,10 +130,10 @@ void sys(TString fileroot, TString output="output.root") {
   
   //total hist
   TCanvas *c = new TCanvas();
-  TH1I *h_tau = new TH1I("htau", "Tau Histogram;Tau (ns);Entries",50,2000,2300);
+  TH1I *h_tau = new TH1I("htau", "Tau Histogram;Tau (ns);Entries",70,1800,2400);
   for(int l=0; l<P; l++) {
     for(int m=0; m<P; m++){
-      h_tau->Fill(tau[l][m]);
+      if(tau[l][m]>1800) h_tau->Fill(tau[l][m]);
     }
   }
   h_tau->SetLineWidth(3);
@@ -144,7 +144,7 @@ void sys(TString fileroot, TString output="output.root") {
   h_tau->Draw();
   double err_syst = h_tau->GetStdDev();
   cout << "------------------------------------------" << endl;
-  cout<<"Systematic error (ns) = "<<err_syst<<endl;
+  cout << "Systematic error (ns) = "<<err_syst<<endl;
   cout << "------------------------------------------" << endl;
 
   f->cd();
