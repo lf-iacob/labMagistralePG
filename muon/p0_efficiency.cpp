@@ -4,10 +4,8 @@
 #include <vector>
 using namespace std;
 
-
 void eff(TString output="eff.root"){
-  gStyle->SetOptFit(111);
-
+  //gStyle->SetOptFit(111);
   TFile *f = new TFile(output, "RECREATE");
   f->cd();
 
@@ -123,6 +121,13 @@ void eff(TString output="eff.root"){
   m_eff->Draw("AP");
   c4->Write();*/
 
+  /*
+  TCanvas* c330 = new TCanvas();
+  c330->SetGrid();
+  G_eff->Draw("AP");
+  G_eff0->Draw("SAME P");
+  */
+  
   // ---- Efficiency VS VSet (tutti i metodi ROOT sovrapposti)
   TCanvas *c5 = new TCanvas();
   c5->SetGrid();
@@ -164,16 +169,25 @@ void eff(TString output="eff.root"){
 
   // ---- Fit con Erf sugli handmade
   TF1 *f_erf = new TF1("f_erf",
-		       "[2]*(1+TMath::Erf((x-[0])/(sqrt(2)*[1])))",
+		       "[2]*0.5*(1+TMath::Erf((x-[0])/(sqrt(2)*[1])))",
 		       vset.front(), vset.back()
 		       );
-  f_erf->SetParameters(100,1400, 100);
-  f_erf->SetParNames("N", "Mean", "Sigma");
+  f_erf->SetParameters(100, 1400, 100);
+  f_erf->SetParNames("Mean", "Sigma", "N");
      // Fit su binomiale
   c3->cd();
   G_eff->Fit(f_erf, "R");
   f_erf->SetLineColor(kRed);
   f_erf->Draw("SAME");
+  double chi2=f_erf->GetChisquare(), par0=f_erf->GetParameter(2), err_par0=f_erf->GetParError(2);
+  
+  int ndf=f_erf->GetNDF();
+  TLegend *leg_1= new TLegend(0.6, 0.15, 0.88, 0.4);
+  leg_1->SetTextSize(0.03);
+  leg_1->AddEntry(f_erf, "Method: binomial");
+  leg_1->AddEntry(f_erf, Form("#chi^{2}/Ndf = %.2f/%d", chi2, ndf), "");
+  leg_1->AddEntry(f_erf, Form("N = %.2f #pm %.2f", par0, err_par0), "");
+  leg_1->Draw();
   c3->Update();
   c3->Write();
      // Fit su bayesiano
@@ -182,8 +196,16 @@ void eff(TString output="eff.root"){
   G_eff0->Fit(f_erf2, "R");
   f_erf2->SetLineColor(kBlue);
   f_erf2->Draw("SAME");
+  double chi2_2=f_erf2->GetChisquare(), par0_2=f_erf2->GetParameter(2), err_par0_2=f_erf2->GetParError(2);
+  int ndf_2=f_erf2->GetNDF();
+  TLegend *leg2 = new TLegend(0.6, 0.15, 0.88, 0.4);
+  leg2->SetTextSize(0.03);
+  leg2->AddEntry(f_erf2, "Method: bayesian");
+  leg2->AddEntry(f_erf2, Form("#chi^{2}/Ndf = %.2f/%d", chi2_2, ndf_2), "");
+  leg2->AddEntry(f_erf2, Form("N = %.2f #pm %.2f", par0_2, err_par0_2), "");
+  leg2->Draw();
   c30->Update();
   c30->Write();
-
+  
   f->Write();
 }
