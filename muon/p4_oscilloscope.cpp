@@ -5,7 +5,7 @@ using namespace std;
 const int N=100; //data for baseline
 const int M=1024*8; //time window
 
-void osc(int indice_wf, TString filename1, TString filename2, TString output="osc_sign.root"){
+void osc(TString filename1, TString filename2, int indice_wf, TString output="osc_sign.root"){
 
   TFile *f = new TFile(output, "RECREATE");
   
@@ -34,39 +34,25 @@ void osc(int indice_wf, TString filename1, TString filename2, TString output="os
   file1.close();
   file2.close();
 
-  int ev=dd->GetEntries();
-
-  double x[M];
-  double y1[M];
-  double y2[M];
-  dd->GetEntry(indice_wf);
-  
-  for(int i=0; i<M; i++) {
-    x[i]  = i*4;   // tempo in ns se campionamento = 4 ns
-    y1[i] = a1[i];
-    y2[i] = a2[i];
-  }
-
-  TCanvas *c1 = new TCanvas("c1","Waveforms",1200,800);
+  TCanvas *c1 = new TCanvas();
   c1->SetGrid();
-  TGraph *g1 = new TGraph(M,x,y1);
-  TGraph *g2 = new TGraph(M,x,y2);
-  g1->SetLineColor(kAzure+5);
-  g1->SetLineWidth(3);
-  g1->GetXaxis()->SetRangeUser(16000,17000);
+  dd->Draw("a2:Iteration$",Form("Entry$==%d", indice_wf),"AL");
+  TGraph *g2 = (TGraph*)gPad->GetListOfPrimitives()->Last();
   g2->SetLineColor(kTeal+2);
   g2->SetLineWidth(3);
-  g2->GetXaxis()->SetRangeUser(16000,17000);
-  g2
-    ->SetTitle("Waveforms;Time (ns);ADC");
-  g2->Draw("AL");
-  g1->Draw("L SAME");
-
+  g2->GetXaxis()->SetRangeUser(4010,4230);
+  g2->SetTitle("Waveforms;Ticks;ADC");
+  dd->Draw("a1:Iteration$",Form("Entry$==%d", indice_wf),"L SAME");
+  TGraph *g1 = (TGraph*)gPad->GetListOfPrimitives()->Last();
+  g1->SetLineColor(kAzure+5);
+  g1->SetLineWidth(3);
+  gPad->Modified();
+  gPad->Update();
   TLegend *leg = new TLegend(0.6,0.15,0.88,0.3);
-  leg->AddEntry(g1,"Signal waveform","l");
+  leg->AddEntry(g1,"PMT Signal","l");
   leg->AddEntry(g2,"Square waveform","l");
   leg->Draw();
-
   c1->Write();
+  
   f->Write();
 }
