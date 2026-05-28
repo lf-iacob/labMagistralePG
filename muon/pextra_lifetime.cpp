@@ -48,7 +48,7 @@ void lt(TString fileroot, TString output="output.root"){
   
   TF1 *ee = new TF1("ee","[0]*exp(-x/[1])+[2]*exp(-x/[3])", 600, 23400);
   gStyle->SetOptFit(0);
-  ee->SetParameters(100, 2000, 100, 50000000);
+  ee->SetParameters(100, 2000, 100, 5000000);
   double tau1, tau1_err, norm1, norm2, tau2, tau2_err, chi2, gdl;
   ee->SetLineColor(col_fit);
   ee->SetLineWidth(3);
