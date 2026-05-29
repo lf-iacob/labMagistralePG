@@ -182,10 +182,10 @@ void eff(TString output="eff.root"){
   double chi2=f_erf->GetChisquare(), par0=f_erf->GetParameter(2), err_par0=f_erf->GetParError(2);
   
   int ndf=f_erf->GetNDF();
-  TLegend *leg_1= new TLegend(0.6, 0.15, 0.88, 0.4);
+  TLegend *leg_1= new TLegend(0.67, 0.15, 0.88, 0.35);
   leg_1->SetTextSize(0.03);
-  leg_1->AddEntry(f_erf, "Method: binomial");
-  leg_1->AddEntry(f_erf, Form("#chi^{2}/Ndf = %.2f/%d", chi2, ndf), "");
+  leg_1->AddEntry(G_eff, "Method: Binomial");
+  leg_1->AddEntry(f_erf, Form("#chi^{2}/Ndf = %.2f/%d", chi2, ndf));
   leg_1->AddEntry(f_erf, Form("N = %.2f #pm %.2f", par0, err_par0), "");
   leg_1->Draw();
   c3->Update();
@@ -198,10 +198,10 @@ void eff(TString output="eff.root"){
   f_erf2->Draw("SAME");
   double chi2_2=f_erf2->GetChisquare(), par0_2=f_erf2->GetParameter(2), err_par0_2=f_erf2->GetParError(2);
   int ndf_2=f_erf2->GetNDF();
-  TLegend *leg2 = new TLegend(0.6, 0.15, 0.88, 0.4);
+  TLegend *leg2 = new TLegend(0.67, 0.15, 0.88, 0.35);
   leg2->SetTextSize(0.03);
-  leg2->AddEntry(f_erf2, "Method: bayesian");
-  leg2->AddEntry(f_erf2, Form("#chi^{2}/Ndf = %.2f/%d", chi2_2, ndf_2), "");
+  leg2->AddEntry(G_eff0, "Method: Bayesian");
+  leg2->AddEntry(f_erf2, Form("#chi^{2}/Ndf = %.2f/%d", chi2_2, ndf_2));
   leg2->AddEntry(f_erf2, Form("N = %.2f #pm %.2f", par0_2, err_par0_2), "");
   leg2->Draw();
   c30->Update();
