@@ -62,6 +62,7 @@ void dcr(TString file1, //.root (alberi)
 
 
   TF1 *pp = new TF1("pp","[1]*TMath::PoissonI(x,[0])", 0, 12);
+  //TF1 *pp = new TF1("pp","[1]*([0]^int(x)/TMath::Factorial(int(x)))*exp([0])",-0.5, 10.5);
   gStyle->SetOptFit(0111);
   pp->SetNpx(10000);
   pp->SetParameters(2,1000);
@@ -80,6 +81,7 @@ void dcr(TString file1, //.root (alberi)
     dcrerr_array[5]={367.361, 439.797, 481.908, 495.836, 525.861},
     vbias_array[5]={54.51, 55.11, 55.81, 56.31, 57.01},
     vbiaserr_array[5]={0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12), 0.01/sqrt(12)};
+
   for(int i=0; i<5; i++)
     cout<<"VBias (V): "<<vbias_array[i]<<" => DCR = "<<dcr_array[i]<<" +- "<<dcrerr_array[i]<<endl;
 
@@ -97,11 +99,20 @@ void dcr(TString file1, //.root (alberi)
   double B = fit_lin->GetParameter(1);
   double eB = fit_lin->GetParError(1);
   double covAB = rg->CovMatrix(0,1);
+  double chi2 = fit_lin->GetChisquare();
+  double gdl = fit_lin->GetNDF();
 
   TGraph *g_fitg = new TGraph(5, vbias_array, dcr_array);
   fit_lin->SetLineColor(kAzure-5);
   fit_lin->SetLineWidth(3);
   fit_lin->Draw("SAME");
+
+  TLegend *leg = new TLegend(0.15, 0.75, 0.5, 0.88);
+  leg->AddEntry(fit_lin, Form("Slope: %.0fe+02 #pm %.0e", B/100, eB), "l");
+  leg->AddEntry(fit_lin, Form("Intercept: %.0fe+04 #pm %.0e", A/10000, eA), "");
+  leg->AddEntry(fit_lin, Form("#chi^{2}/NDf = %.2f/%.0f", chi2, gdl), "");
+  leg -> Draw();
+  c1->Update();
   
   cout<<endl;
   
