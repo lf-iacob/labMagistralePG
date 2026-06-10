@@ -32,7 +32,7 @@ void albero_dcr(TString filename, TString output="output.root"){
   ifstream file;
   file.open(filename);
   while(file.good()){
-    b=0.; c=0.; //amp=0;
+    b=0.; c=0.; amp=0;
     for(int i=0;i<M;i++){
       file>>a[i]; 
       if(i<N) b+=double(a[i])/N;
