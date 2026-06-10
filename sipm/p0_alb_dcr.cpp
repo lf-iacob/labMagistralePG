@@ -42,6 +42,14 @@ void albero_dcr(TString filename, TString output="output.root"){
   }
   file.close();  
 
+   int n = dd->GetEntries();
+
+  //---- Amplitude THistogram
+  TH1F *hamp = new TH1F("hamp", "Amplitude Histogram;Amplitude (ADC);Entries",500,-20,1000); //range to be modified
+  for(int i=0; i<n; i++) {
+    dd->GetEntry(i);
+    hamp->Fill(amp);
+  }
   
   //---- Saving in TFile
   f->Write();
