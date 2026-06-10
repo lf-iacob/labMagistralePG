@@ -23,10 +23,10 @@ void albero_dcr(TString filename, TString output="output.root"){
   double b, c;
   //double amp;
   TTree *dd = new TTree("dd", "dd");
-  dd->Branch("A", a, "a[8192]/I");         // ---------- MODIFICA TIME WINDOW!!!!!!!!!!!
+  dd->Branch("A", a, "a[8192]/I");      
   dd->Branch("B", &b, "b/D");
   dd->Branch("C", &c, "c/D");
-  //dd->Branch("AMP", &amp, "amp/D");
+  dd->Branch("AMP", &amp, "amp/D");
 
   //---- TTree->Fill()
   ifstream file;
@@ -36,7 +36,7 @@ void albero_dcr(TString filename, TString output="output.root"){
     for(int i=0;i<M;i++){
       file>>a[i]; 
       if(i<N) b+=double(a[i])/N;
-      //if((b-a[i])>amp) amp = b-a[i];
+      if((b-a[i])>amp) amp = b-a[i];
     }
     dd->Fill();
   }
