@@ -22,7 +22,7 @@ void dcr(TString file1, //.root (alberi)
      54.51 (250) -> 30
      55.11 (40) -> 48
      55.81 (70) -> 60
-     56.31 (200, 230, 280) -> 60
+     56.31 (200, 230, 280) -> 65
      57.01 (a sentimento) -> 75
   */        
   cout<<"Threshold: "<<th<<endl<<endl;
