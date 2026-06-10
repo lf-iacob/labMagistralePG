@@ -21,7 +21,7 @@ void albero_dcr(TString filename, TString output="output.root"){
   //---- Create TTree
   int a[M];
   double b, c;
-  //double amp;
+  double amp;
   TTree *dd = new TTree("dd", "dd");
   dd->Branch("A", a, "a[8192]/I");      
   dd->Branch("B", &b, "b/D");
