@@ -88,7 +88,7 @@ void eff(TString output="eff.root"){
   ch2->Write();
 
   // ---- Efficiency VS VSet
-     // Binomial error by hand
+	// Binomial error by hand
   TCanvas *c3 = new TCanvas();
   TGraphErrors *G_eff = new TGraphErrors(n, &vset[0], &eff[0], &err_vset[0], &err_eff[0]);
   G_eff->SetTitle("Efficiency handmade binomial;VSet (V);Efficiency");
@@ -97,8 +97,7 @@ void eff(TString output="eff.root"){
   c3->SetGrid();
   G_eff->SetMinimum(-0.05);
   G_eff->Draw("AP");
-  
-        // Bayesian method by hand
+	// Bayesian method by hand
   TCanvas *c30 = new TCanvas();
   TGraphErrors *G_eff0 = new TGraphErrors(n, &vset[0], &eff0[0], &err_vset[0], &err_eff0[0]);
   G_eff0->SetTitle("Efficiency handmade bayesian;VSet (V);Efficiency");
