@@ -42,7 +42,7 @@ void tree_lt(TString filename1, TString filename2, TString output="output.root")
 		  break;
       } 
     }
-     for(int i=1; i<L; i++){
+    for(int i=1; i<L; i++){
       if(((b2-a2[i])>s)){
 		  t2=i*4;
 		  break;
