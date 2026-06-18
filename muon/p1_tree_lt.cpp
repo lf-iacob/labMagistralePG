@@ -32,20 +32,20 @@ void tree_lt(TString filename1, TString filename2, TString output="output.root")
       file1>>a1[i];
       file2>>a2[i];
       if(i<N){
-	b1+=double(a1[i])/N;
-        b2+=double(a2[i])/N;
+		  b1+=double(a1[i])/N;
+		  b2+=double(a2[i])/N;
       }
     }
     for(int i=1; i<L; i++){
       if(((b1-a1[i])>s)){
-	t1=i*4;
-	break;
+		  t1=i*4;
+		  break;
       } 
     }
      for(int i=1; i<L; i++){
       if(((b2-a2[i])>s)){
-	t2=i*4;
-	break;
+		  t2=i*4;
+		  break;
       } 
     } 
     t=abs(t2-t1);
