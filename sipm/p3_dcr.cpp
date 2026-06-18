@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-const int L=1024*8; //----- TO BE MODIFIED BY HAND
+const int L=1024*8;
 
 void dcr(TString file1, //.root (alberi)
 	 double th, TString output="output.root"
