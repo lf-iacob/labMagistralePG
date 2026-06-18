@@ -179,7 +179,6 @@ void eff(TString output="eff.root"){
   f_erf->SetLineColor(kRed);
   f_erf->Draw("SAME");
   double chi2=f_erf->GetChisquare(), par0=f_erf->GetParameter(2), err_par0=f_erf->GetParError(2);
-  
   int ndf=f_erf->GetNDF();
   TLegend *leg_1= new TLegend(0.67, 0.15, 0.88, 0.35);
   leg_1->SetTextSize(0.03);
